@@ -20,12 +20,13 @@ copy=0
 verbose=1
 dir=
 user=$(whoami)
+with_numa_bind=0
 with_perf=0
 with_perf_graph=0
 timeout=
 more_env=
 
-while getopts "u:h:H:cvC:w:pPx:T:" opt; do
+while getopts "u:h:H:cvC:w:pPbx:T:" opt; do
     case "$opt" in
     h)  # this overrides the user environment variable
         THRILL_SSHLIST=$OPTARG
@@ -46,6 +47,8 @@ while getopts "u:h:H:cvC:w:pPx:T:" opt; do
     p)  with_perf=1
         ;;
     P)  with_perf_graph=1
+        ;;
+    b)  with_numa_bind=1
         ;;
     T)  timeout=$OPTARG
         ;;
@@ -156,6 +159,16 @@ for hostport in $THRILL_SSHLIST; do
   if [ "$with_perf_graph" == "1" ]; then
       # run with perf
       RUN_PREFIX="exec perf record -g -o perf-$rank.data"
+  fi
+  if [ "$with_numa_bind" == "1" ]; then
+      # run with numa bind
+      BIND_TO=$((rank % 2))
+      # BIND_TO=0
+      FROM=${BIND_TO}
+      STRIDE=2
+      echo "Host ${hostport} is bind to NUMA ${BIND_TO} (from ${FROM} with stride ${STRIDE})"
+      THRILL_EXPORTS="${THRILL_EXPORTS} THRILL_BIND_START=\"$FROM\" THRILL_BIND_STRIDE=\"$STRIDE\""
+      RUN_PREFIX="exec numactl --membind=${BIND_TO} --cpunodebind=${BIND_TO}"
   fi
   if [ "$timeout" != "" ]; then
       RUN_PREFIX="$RUN_PREFIX timeout ${timeout}"

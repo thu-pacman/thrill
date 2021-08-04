@@ -41,119 +41,143 @@ namespace common {
 
 void PortSetCloseOnExec(int fd) {
 #if !defined(_MSC_VER)
-    if (fcntl(fd, F_SETFD, FD_CLOEXEC) != 0) {
-        throw ErrnoException("Error setting FD_CLOEXEC on file descriptor");
-    }
+  if (fcntl(fd, F_SETFD, FD_CLOEXEC) != 0) {
+    throw ErrnoException("Error setting FD_CLOEXEC on file descriptor");
+  }
 #else
-    tlx::unused(fd);
+  tlx::unused(fd);
 #endif
 }
 
 void MakePipe(int out_pipefds[2]) {
 #if THRILL_HAVE_PIPE2
-    if (pipe2(out_pipefds, O_CLOEXEC) != 0)
-        throw ErrnoException("Error creating pipe");
+  if (pipe2(out_pipefds, O_CLOEXEC) != 0)
+    throw ErrnoException("Error creating pipe");
 #elif defined(_MSC_VER)
-    if (_pipe(out_pipefds, 256, O_BINARY) != 0)
-        throw ErrnoException("Error creating pipe");
+  if (_pipe(out_pipefds, 256, O_BINARY) != 0)
+    throw ErrnoException("Error creating pipe");
 #else
-    if (pipe(out_pipefds) != 0)
-        throw ErrnoException("Error creating pipe");
+  if (pipe(out_pipefds) != 0)
+    throw ErrnoException("Error creating pipe");
 
-    PortSetCloseOnExec(out_pipefds[0]);
-    PortSetCloseOnExec(out_pipefds[1]);
+  PortSetCloseOnExec(out_pipefds[0]);
+  PortSetCloseOnExec(out_pipefds[1]);
 #endif
 }
 
-void LogCmdlineParams(JsonLogger& logger) {
+void LogCmdlineParams(JsonLogger &logger) {
 #if __linux__
-    // read cmdline from /proc/<pid>/cmdline
-    pid_t mypid = getpid();
+  // read cmdline from /proc/<pid>/cmdline
+  pid_t mypid = getpid();
 
-    std::ifstream proc("/proc/" + std::to_string(mypid) + "/cmdline");
-    if (!proc.good()) return;
+  std::ifstream proc("/proc/" + std::to_string(mypid) + "/cmdline");
+  if (!proc.good())
+    return;
 
-    std::vector<std::string> args;
-    std::string arg;
-    while (std::getline(proc, arg, '\0'))
-        args.emplace_back(arg);
+  std::vector<std::string> args;
+  std::string arg;
+  while (std::getline(proc, arg, '\0'))
+    args.emplace_back(arg);
 
-    std::string prog;
-    if (!args.empty()) {
-        prog = args[0];
-        std::string::size_type slashpos = prog.rfind('/');
-        if (slashpos != std::string::npos)
-            prog = prog.substr(slashpos + 1);
-    }
+  std::string prog;
+  if (!args.empty()) {
+    prog = args[0];
+    std::string::size_type slashpos = prog.rfind('/');
+    if (slashpos != std::string::npos)
+      prog = prog.substr(slashpos + 1);
+  }
 
-    std::ostringstream cmdline;
-    for (size_t i = 0; i < args.size(); ++i) {
-        if (i != 0)
-            cmdline << ' ';
+  std::ostringstream cmdline;
+  for (size_t i = 0; i < args.size(); ++i) {
+    if (i != 0)
+      cmdline << ' ';
 
-        arg = args[i];
-        // escape " -> \"
-        if (arg.find('"') != std::string::npos)
-            tlx::replace_all(arg, "\"", "\\\"");
-        cmdline << arg;
-    }
+    arg = args[i];
+    // escape " -> \"
+    if (arg.find('"') != std::string::npos)
+      tlx::replace_all(arg, "\"", "\\\"");
+    cmdline << arg;
+  }
 
-    logger << "class" << "Cmdline"
-           << "event" << "start"
-           << "program" << prog
-           << "argv" << args
-           << "cmdline" << cmdline.str();
+  logger << "class"
+         << "Cmdline"
+         << "event"
+         << "start"
+         << "program" << prog << "argv" << args << "cmdline" << cmdline.str();
 #else
-    tlx::unused(logger);
+  tlx::unused(logger);
 #endif
 }
 
-void SetCpuAffinity(std::thread& thread, size_t cpu_id) {
+static size_t getIntFromEnv(const char *name, size_t default_val) {
+  auto val = getenv(name);
+  if (val == nullptr) {
+    return default_val;
+  }
+  return atoll(val);
+}
+
+static size_t queryCpuId(size_t in_cpu_id) {
+  auto fromId = getIntFromEnv("THRILL_BIND_START", 0);
+  auto stride = getIntFromEnv("THRILL_BIND_STRIDE", 1);
+  assert(std::thread::hardware_concurrency() % stride == 0);
+  size_t cpu_id = in_cpu_id % (std::thread::hardware_concurrency() / stride);
+  size_t physical_id = fromId + stride * cpu_id;
+  if (physical_id >= std::thread::hardware_concurrency()) {
+    LOG1 << "Impossible";
+    std::abort();
+  }
+  return physical_id;
+}
+
+void SetCpuAffinity(std::thread &thread, size_t cpu_id) {
 #if __linux__ && !THRILL_ON_TRAVIS
-    cpu_set_t cpuset;
-    CPU_ZERO(&cpuset);
-    CPU_SET(cpu_id % std::thread::hardware_concurrency(), &cpuset);
-    int rc = pthread_setaffinity_np(
-        thread.native_handle(), sizeof(cpu_set_t), &cpuset);
-    if (rc != 0) {
-        LOG1 << "Error calling pthread_setaffinity_np(): "
-             << rc << ": " << strerror(errno);
-    }
+  cpu_set_t cpuset;
+  CPU_ZERO(&cpuset);
+  auto physical_id = queryCpuId(cpu_id);
+  CPU_SET(physical_id, &cpuset);
+  int rc = pthread_setaffinity_np(thread.native_handle(), sizeof(cpu_set_t),
+                                  &cpuset);
+  if (rc != 0) {
+    LOG1 << "Error calling pthread_setaffinity_np(): " << rc << ": "
+         << strerror(errno);
+  }
 #else
-    tlx::unused(thread);
-    tlx::unused(cpu_id);
+  tlx::unused(thread);
+  tlx::unused(cpu_id);
 #endif
 }
 
 void SetCpuAffinity(size_t cpu_id) {
 #if __linux__ && !THRILL_ON_TRAVIS
-    cpu_set_t cpuset;
-    CPU_ZERO(&cpuset);
-    CPU_SET(cpu_id % std::thread::hardware_concurrency(), &cpuset);
-    int rc = pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuset);
-    if (rc != 0) {
-        LOG1 << "Error calling pthread_setaffinity_np(): "
-             << rc << ": " << strerror(errno);
-    }
+  cpu_set_t cpuset;
+  CPU_ZERO(&cpuset);
+  auto physical_id = queryCpuId(cpu_id);
+  CPU_SET(physical_id, &cpuset);
+  int rc = pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuset);
+  if (rc != 0) {
+    LOG1 << "Error calling pthread_setaffinity_np(): " << rc << ": "
+         << strerror(errno);
+  }
 #else
-    tlx::unused(cpu_id);
+  tlx::unused(cpu_id);
 #endif
 }
 
 std::string GetHostname() {
 #if __linux__
-    char buffer[64];
-    gethostname(buffer, 64);
-    return buffer;
+  char buffer[64];
+  gethostname(buffer, 64);
+  return buffer;
 #else
-    return "<unknown host>";
+  return "<unknown host>";
 #endif
 }
 
-struct dirent * ts_readdir(DIR* dirp) {
-    static std::mutex s_mutex;
-    std::unique_lock<std::mutex> lock(s_mutex);
-    return ::readdir(dirp);
+struct dirent *ts_readdir(DIR *dirp) {
+  static std::mutex s_mutex;
+  std::unique_lock<std::mutex> lock(s_mutex);
+  return ::readdir(dirp);
 }
 
 } // namespace common
