@@ -29,6 +29,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <chrono>
 
 namespace examples {
 namespace page_rank {
@@ -135,6 +136,88 @@ auto PageRank(const DIA<OutgoingLinks, InStack>& links,
             .Collapse();
     }
 
+    return ranks;
+}
+
+template <const bool UseLocationDetection = true, typename InStack>
+auto PageRankJoinSelf(const DIA<LinkedPage, InStack>& links, size_t iterations) {
+
+    api::Context& ctx = links.context();
+    // initialize all ranks to 1.0 / n: (url, rank)
+
+    DIA<RankedPage> ranks = links.Map([](const LinkedPage &lp) {
+        return std::make_pair(lp.first, Rank(1.0));
+    });
+
+    // do iterations
+    auto time_start = std::chrono::high_resolution_clock::now();
+    for (size_t iter = 0; iter < iterations; ++iter) {
+
+        // for all outgoing link, get their rank contribution from all
+        // links by doing:
+        //
+        // 1) group all outgoing links with rank of its parent page: (Zip)
+        // ([linked_url, linked_url, ...], rank_parent)
+        //
+        // 2) compute rank contribution for each linked_url: (FlatMap)
+        // (linked_url, rank / outgoing.size)
+        if (debug && iter == 0) {
+            links
+            .Map([](const LinkedPage& ol) {
+                     return tlx::join(',', ol.second)
+                     + " <- " + std::to_string(ol.first);
+                 })
+            .Print("outs_rank");
+        }
+
+        auto outs_rank = InnerJoin(
+            LocationDetectionFlag<UseLocationDetection>(),
+            links, ranks,
+            [](const LinkedPage& lp) { return lp.first; },
+            [](const RankedPage& rp) { return rp.first; },
+            [](const LinkedPage& lp, const RankedPage& rp) {
+                return std::make_pair(lp.second, rp.second);
+            });
+
+        //if (debug && iter == 1) {
+        //    outs_rank
+        //    .Map([](const OutgoingLinksRank& ol) {
+        //             return tlx::join(',', ol.first)
+        //             + " <- " + std::to_string(ol.second);
+        //         })
+        //    .Print("outs_rank");
+        //}
+
+        auto contribs = outs_rank.template FlatMap<PageRankStdPair>(
+            [](const OutgoingLinksRank& p, auto emit) {
+                if (p.first.size() > 0) {
+                    Rank rank_contrib = p.second / static_cast<double>(p.first.size());
+                    for (const PageId& tgt : p.first)
+                        emit(std::make_pair(tgt, rank_contrib));
+                }
+            });
+
+        // reduce all rank contributions by adding all rank contributions and
+        // compute the new rank: (url, rank)
+        ranks =
+            contribs
+            .ReducePair(
+                [](const Rank& p1, const Rank& p2) {
+                    return p1 + p2;
+                })
+            .Map([](const PageRankStdPair& p) {
+                     return std::make_pair(
+                         p.first,
+                         dampening * p.second + (1 - dampening));
+                 }).Collapse();
+
+        ranks.Execute();
+        auto time_now = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double> diff = time_now - time_start;
+        if (ctx.my_rank() == 0) {
+            std::cout << "step " << iter << ", time: " << diff.count() << " s" << std::endl;
+        }
+    }
     return ranks;
 }
 
