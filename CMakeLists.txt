@@ -516,8 +516,9 @@ if(THRILL_USE_HDFS3)
 
   include(ExternalProject)
   ExternalProject_Add(libhdfs3
-    URL https://github.com/Pivotal-Data-Attic/pivotalrd-libhdfs3/archive/v2.2.31.tar.gz
-    URL_MD5 7629f18ba81b638f5f47599e07eee28c
+	  GIT_REPOSITORY https://github.com/erikmuttersbach/libhdfs3
+	  GIT_TAG origin/apache-rpc-9
+	  UPDATE_DISCONNECTED true
     PREFIX ${CMAKE_BINARY_DIR}/extlib/libhdfs3
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>)
 

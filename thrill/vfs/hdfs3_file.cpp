@@ -14,6 +14,7 @@
 #include <thrill/common/string.hpp>
 
 #include <tlx/die.hpp>
+#include <tlx/string.hpp>
 
 #if THRILL_HAVE_LIBHDFS3
 #include <hdfs/hdfs.h>
@@ -66,7 +67,7 @@ hdfsFS Hdfs3FindConnection(const std::string& hostport) {
         return it->second;
 
     // split host:port
-    std::vector<std::string> splitted = common::Split(hostport, ':', 2);
+    std::vector<std::string> splitted = tlx::split(':', hostport, 2);
     uint16_t port;
 
     if (splitted.size() == 1) {
@@ -78,7 +79,7 @@ hdfsFS Hdfs3FindConnection(const std::string& hostport) {
     }
 
     // split user@host
-    std::vector<std::string> user_split = common::Split(splitted[0], '@', 2);
+    std::vector<std::string> user_split = tlx::split('@', splitted[0], 2);
     const char* host, * user;
 
     if (user_split.size() == 1) {
@@ -113,11 +114,11 @@ void Hdfs3Glob(const std::string& _path, const GlobType& gtype,
 
     std::string path = _path;
     // crop off hdfs://
-    die_unless(common::StartsWith(path, "hdfs://"));
+    die_unless(tlx::starts_with(path, "hdfs://"));
     path = path.substr(7);
 
     // split uri into host/path
-    std::vector<std::string> splitted = common::Split(path, '/', 2);
+    std::vector<std::string> splitted = tlx::split('/', path, 2);
 
     hdfsFS fs = Hdfs3FindConnection(splitted[0]);
     std::string hosturi = "hdfs://" + splitted[0];
@@ -207,11 +208,11 @@ ReadStreamPtr Hdfs3OpenReadStream(
 
     std::string path = _path;
     // crop off hdfs://
-    die_unless(common::StartsWith(path, "hdfs://"));
+    die_unless(tlx::starts_with(path, "hdfs://"));
     path = path.substr(7);
 
     // split uri into host/path
-    std::vector<std::string> splitted = common::Split(path, '/', 2);
+    std::vector<std::string> splitted = tlx::split('/', path, 2);
     die_unless(splitted.size() == 2);
 
     // prepend root /
@@ -266,11 +267,11 @@ WriteStreamPtr Hdfs3OpenWriteStream(const std::string& _path) {
 
     std::string path = _path;
     // crop off hdfs://
-    die_unless(common::StartsWith(path, "hdfs://"));
+    die_unless(tlx::starts_with(path, "hdfs://"));
     path = path.substr(7);
 
     // split uri into host/path
-    std::vector<std::string> splitted = common::Split(path, '/', 2);
+    std::vector<std::string> splitted = tlx::split('/', path, 2);
 
     // prepend root /
     splitted[1] = "/" + splitted[1];
