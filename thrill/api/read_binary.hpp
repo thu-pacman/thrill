@@ -140,8 +140,8 @@ public:
                     my_range.end >= file_end ? file_size : my_range.end - file_begin);
                 fi.is_compressed = false;
 
-                sLOG << "ReadBinary: fileinfo"
-                     << "path" << fi.path << "range" << fi.range;
+                //std::cout << "ReadBinary: fileinfo"
+                //     << "path" << fi.path << "range" << fi.range << std::endl;
 
                 if (fi.range.begin == fi.range.end) continue;
 
@@ -162,7 +162,9 @@ public:
 
                     for (size_t off = fi.range.begin; off < fi.range.end;
                          off += data::default_block_size) {
-
+                        
+                        //std::cout << "fixed size: " << fixed_size_ << std::endl;
+                        //std::cout << "block size: " << data::default_block_size << std::endl;
                         size_t bsize = std::min(
                             off + data::default_block_size, fi.range.end) - off;
 
@@ -179,7 +181,7 @@ public:
 
                         item_off += item_num * fixed_size_ - bsize;
 
-                        LOG << "ReadBinary: adding Block " << block;
+                        //std::cout << "ReadBinary: adding Block " << block << std::endl;
                         ext_file_.AppendBlock(std::move(block));
                     }
 
@@ -216,8 +218,8 @@ public:
                 i++;
             }
 
-            sLOG << "ReadBinary:" << my_files_.size() << "files,"
-                 << "my_range" << my_range;
+            //std::cout << "ReadBinary:" << my_files_.size() << "files,"
+            //     << "my_range" << my_range << std::endl;
         }
     }
 
@@ -227,24 +229,27 @@ public:
                          local_storage) { }
 
     void PushData(bool consume) final {
-        LOG << "ReadBinaryNode::PushData() start " << *this
-            << " consume=" << consume
-            << " use_ext_file_=" << use_ext_file_;
+        //std::cout << "ReadBinaryNode::PushData() start " << *this
+        //    << " consume=" << consume
+        //    << " use_ext_file_=" << use_ext_file_ << std::endl;
 
         if (use_ext_file_)
             return this->PushFile(ext_file_, consume);
 
         // Hook Read
         for (const FileInfo& file : my_files_) {
-            LOG << "ReadBinaryNode::PushData() opening " << file.path;
+            //std::cout << "ReadBinaryNode::PushData() opening " << file.path << std::endl;
 
             VfsFileBlockReader br(
                 VfsFileBlockSource(file, context_,
                                    stats_total_bytes, stats_total_reads));
 
+            //std::cout << "ReadBinaryNode::PushData() initialisze BlockReader, total " << stats_total_bytes << ", read " << stats_total_reads << std::endl;
             while (br.HasNext()) {
                 this->PushItem(br.template NextNoSelfVerify<ValueType>());
             }
+
+            //std::cout << "ReadBinaryNode::PushData() finish opening " << file.path << std::endl;
         }
 
         Super::logger_
@@ -308,12 +313,13 @@ private:
             stats_total_bytes_ += size;
             stats_total_reads_++;
 
-            LOG << "VfsFileBlockSource::NextBlock() size " << size;
+            //std::cout << "VfsFileBlockSource::NextBlock() size " << size << std::endl;
+            //std::cout << "rb:" << rb << ", remain size: " << remain_size_ << ", stats_total_bytes: " << stats_total_bytes_ << std::endl;
 
             if (size > 0) {
                 if (!is_compressed_) {
-                    assert(remain_size_ >= rb);
-                    remain_size_ -= rb;
+                    assert(remain_size_ >= size);
+                    remain_size_ -= size;
                 }
                 return data::PinnedBlock(std::move(bytes), 0, size, 0, 0,
                                          /* typecode_verify */ false);

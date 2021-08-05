@@ -215,10 +215,16 @@ private:
                 // worker already covers it
                 while (!found_n) {
                     while (current_ < buffer_.end()) {
-                        if (TLX_UNLIKELY(*current_++ == '\n')) {
+                        if (TLX_UNLIKELY(*current_ == '\r')) {
+                            current_ = current_ + 2;
+                            found_n = true;
+                            break;
+                        } else if (TLX_UNLIKELY(*current_ == '\n')) {
+                            current_++;
                             found_n = true;
                             break;
                         }
+                        current_++;
                     }
                     // no newline found: read new data into buffer_builder
                     if (!found_n) {
@@ -241,7 +247,10 @@ private:
             data_.clear();
             while (true) {
                 while (TLX_LIKELY(current_ < buffer_.end())) {
-                    if (TLX_UNLIKELY(*current_ == '\n')) {
+                    if (TLX_UNLIKELY(*current_ == '\r')) {
+                        current_ += 2;
+                        return data_;
+                    } else if (TLX_UNLIKELY(*current_ == '\n')) {
                         current_++;
                         return data_;
                     }
