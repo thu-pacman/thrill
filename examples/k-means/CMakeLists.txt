@@ -9,6 +9,7 @@
 ################################################################################
 
 thrill_build_prog(k-means_run)
+thrill_build_prog(k-means_run_small)
 
 if(MSVC)
   # requires /bigobj flag to build

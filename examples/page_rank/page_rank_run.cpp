@@ -37,7 +37,7 @@ struct PageRankLineParser {
         // parse "source\ttarget\n" lines
         char* endptr;
         unsigned long src = std::strtoul(input.c_str(), &endptr, 10);
-        die_unless(endptr && *endptr == '\t' &&
+        die_unless(endptr && *endptr == ' ' &&
                    "Could not parse src tgt line");
         unsigned long tgt = std::strtoul(endptr + 1, &endptr, 10);
         die_unless(endptr && *endptr == 0 &&
@@ -139,10 +139,6 @@ static void RunJoinPageRankEdgePerLine(
         ReadLines(ctx, input_path)
         .Map(PageRankLineParser());
 
-    size_t num_pages =
-        input.Keep()
-        .Map([](const PagePageLink& ppl) { return std::max(ppl.src, ppl.tgt); })
-        .Max() + 1;
     // aggregate all outgoing links of a page in this format: by index
     // ([linked_url, linked_url, ...])
 
@@ -160,8 +156,8 @@ static void RunJoinPageRankEdgePerLine(
 
     // perform actual page rank calculation iterations
 
-    auto ranks = PageRankJoin<UseLocationDetection>(
-        links, num_pages, iterations);
+    auto ranks = PageRankJoinSelf<UseLocationDetection>(
+        links, iterations);
 
     // construct output as "pageid: rank"
 
@@ -179,7 +175,6 @@ static void RunJoinPageRankEdgePerLine(
     if (ctx.my_rank() == 0) {
         if (UseLocationDetection) {
             LOG1 << "RESULT benchmark=pagerank_gen detection=ON"
-                 << " pages=" << num_pages
                  << " iterations=" << iterations
                  << " time=" << timer
                  << " traffic= " << ctx.net_manager().Traffic()
@@ -187,7 +182,6 @@ static void RunJoinPageRankEdgePerLine(
         }
         else {
             LOG1 << "RESULT benchmark=pagerank_gen detection=OFF"
-                 << " pages=" << num_pages
                  << " iterations=" << iterations
                  << " time=" << timer
                  << " traffic=" << ctx.net_manager().Traffic()

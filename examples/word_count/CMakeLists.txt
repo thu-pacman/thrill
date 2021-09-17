@@ -13,5 +13,7 @@ thrill_build_prog(random_text_writer)
 thrill_build_prog(word_count_run)
 thrill_build_prog(word_count_sequential)
 thrill_build_prog(word_count_simple)
+thrill_build_prog(word_count_run_end)
+thrill_build_prog(word_count_small)
 
 ################################################################################

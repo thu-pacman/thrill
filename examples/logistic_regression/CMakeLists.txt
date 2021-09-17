@@ -9,5 +9,7 @@
 ################################################################################
 
 thrill_build_prog(logistic_regression)
+thrill_build_prog(logistic_regression_run)
+thrill_build_prog(logistic_regression_run_small)
 
 ################################################################################

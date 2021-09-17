@@ -14,6 +14,7 @@
 #include <thrill/api/gather.hpp>
 #include <thrill/api/generate.hpp>
 #include <thrill/api/read_lines.hpp>
+#include <thrill/api/zip_with_index.hpp>
 #include <thrill/common/logger.hpp>
 #include <thrill/common/string.hpp>
 #include <tlx/cmdline_parser.hpp>
@@ -174,6 +175,8 @@ static void RunKMeansFile(
                 // parse "<pt> <pt> <pt> ..." lines
                 Point p = Point::Make(dimensions);
                 char* endptr = const_cast<char*>(input.c_str());
+                // jump first item
+                while (*endptr != ' ') ++endptr;
                 for (size_t i = 0; i < dimensions; ++i) {
                     while (*endptr == ' ') ++endptr;
                     p.x[i] = std::strtod(endptr, &endptr);
@@ -194,16 +197,17 @@ static void RunKMeansFile(
 
     double cost = result.ComputeCost(points.Keep());
     if (ctx.my_rank() == 0)
-        LOG1 << "k-means cost: " << cost;
+        std::cout << "k-means cost: " << cost << std::endl;
 
     if (svg_path.size() && dimensions == 2) {
         OutputSVG(svg_path, svg_scale, points.Collapse(), result);
     }
 
     ctx.net.Barrier();
+    timer.Stop();
     if (ctx.my_rank() == 0) {
         auto traffic = ctx.net_manager().Traffic();
-        LOG1 << "RESULT"
+        std::cout << "RESULT"
              << " benchmark=k-means"
              << " bisecting=" << bisecting
              << " dimensions=" << dimensions
@@ -297,6 +301,11 @@ int main(int argc, char* argv[]) {
                     break;
                 case 3:
                     RunKMeansFile<Point<3> >(
+                        ctx, bisecting, dimensions, num_clusters, iterations,
+                        epsilon, svg_path, svg_scale, input_paths);
+                    break;
+                case 64:
+                    RunKMeansFile<Point<64> >(
                         ctx, bisecting, dimensions, num_clusters, iterations,
                         epsilon, svg_path, svg_scale, input_paths);
                     break;

@@ -183,12 +183,25 @@ int main(int argc, char* argv[]) {
             }
             else {
                 if (use_signed_char) {
-                    auto r = ReadBinary<RecordSigned>(ctx, input).Sort();
+                    auto rr = ReadBinary<RecordSigned>(ctx, input).Keep();
+                    size_t count = rr.Size();
+                    if (ctx.my_rank() == 0) {
+                        std::cout << "whole count is " << count << std::endl;
+                    }
+
+                    common::StatsTimerStart inner_timer;
+                    auto r = rr.Sort();
 
                     if (output.size())
                         r.WriteBinary(output);
                     else
                         r.Size();
+
+                    ctx.net.Barrier();
+                    inner_timer.Stop();
+                    if (ctx.my_rank() == 0) {
+                        std::cout << "compute time is " << inner_timer << std::endl;
+                    }
                 }
                 else {
                     auto r = ReadBinary<Record>(ctx, input).Sort();

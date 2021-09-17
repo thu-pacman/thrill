@@ -33,16 +33,17 @@ using WordCountPair = std::pair<std::string, size_t>;
 //! words, and returns a DIA containing WordCountPairs.
 template <typename InputStack>
 auto WordCount(const DIA<std::string, InputStack>& input) {
-
-    auto word_pairs = input.template FlatMap<WordCountPair>(
+    auto words = input.template FlatMap<tlx::string_view>(
         [](const std::string& line, auto emit) -> void {
             /* map lambda: emit each word */
             tlx::split_view(
                 ' ', line, [&](const tlx::string_view& sv) {
-                    if (sv.size() == 0) return;
-                    emit(WordCountPair(sv.to_string(), 1));
+                    emit(sv);
                 });
         });
+
+    auto word_pairs = words.Filter([](const tlx::string_view &sv) { return sv.size() != 0; })
+            .template Map([](const tlx::string_view &sv) { return WordCountPair{sv.to_string(), 1}; });
 
     return word_pairs.ReduceByKey(
         [](const WordCountPair& in) -> std::string {

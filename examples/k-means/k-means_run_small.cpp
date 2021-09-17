@@ -1,5 +1,5 @@
 /*******************************************************************************
- * examples/k-means/k-means.hpp
+ * examples/k-means/k-means_run.cpp
  *
  * Part of Project Thrill - http://project-thrill.org
  *
@@ -9,10 +9,13 @@
  * All rights reserved. Published under the BSD-2 license in the LICENSE file.
  ******************************************************************************/
 
-#pragma once
-#ifndef THRILL_EXAMPLES_K_MEANS_K_MEANS_HEADER
-#define THRILL_EXAMPLES_K_MEANS_K_MEANS_HEADER
-
+#include <thrill/api/gather.hpp>
+#include <thrill/api/generate.hpp>
+#include <thrill/api/read_lines.hpp>
+#include <thrill/api/zip_with_index.hpp>
+#include <thrill/common/logger.hpp>
+#include <thrill/common/string.hpp>
+#include <tlx/cmdline_parser.hpp>
 #include <thrill/api/all_gather.hpp>
 #include <thrill/api/cache.hpp>
 #include <thrill/api/collapse.hpp>
@@ -27,22 +30,18 @@
 #include <thrill/data/serialization_cereal.hpp>
 
 #include <limits>
+#include <algorithm>
+#include <fstream>
+#include <iomanip>
+#include <random>
 #include <string>
 #include <utility>
 #include <vector>
-#include <chrono>
 
-namespace examples {
-namespace k_means {
+using namespace thrill; // NOLINT
 
-using thrill::DIA;
-
-//! Compile-Time Fixed-Dimensional Points
 template <size_t D>
 using Point = thrill::common::Vector<D, double>;
-
-//! A variable D-dimensional point with double precision
-using VPoint = thrill::common::VVector<double>;
 
 template <typename Point>
 using PointClusterId = std::pair<Point, size_t>;
@@ -175,8 +174,7 @@ private:
 //! input and an output parameter. The method returns a std::pair<Point2D,
 //! size_t> = Point2DClusterId into the centroids for each input point.
 template <typename Point, typename InStack>
-auto KMeans(const DIA<Point, InStack>& input_points, size_t dimensions,
-            size_t num_clusters, size_t iterations, double epsilon = 0.0) {
+auto KMeans(const DIA<Point, InStack>& input_points, size_t dimensions, size_t num_clusters, size_t iterations, double epsilon = 0.0) {
 
     thrill::api::Context& ctx = input_points.context();
 
@@ -190,7 +188,7 @@ auto KMeans(const DIA<Point, InStack>& input_points, size_t dimensions,
     std::vector<Point> local_centroids =
         points.Keep().Sample(num_clusters).AllGather();
 
-    auto time_start = std::chrono::high_resolution_clock::now();
+    //auto time_start = std::chrono::high_resolution_clock::now();
     for (size_t iter = 0; iter < iterations && !break_condition; ++iter) {
 
         std::vector<Point> old_centroids = local_centroids;
@@ -252,11 +250,11 @@ auto KMeans(const DIA<Point, InStack>& input_points, size_t dimensions,
                 }
             }
         }
-        auto time_now = std::chrono::high_resolution_clock::now();
-        std::chrono::duration<double> diff = time_now - time_start;
-        if (ctx.my_rank() == 0) {
-            std::cout << "step " << iter << ", time: " << diff.count() << " s" << std::endl;
-        }
+        //auto time_now = std::chrono::high_resolution_clock::now();
+        //std::chrono::duration<double> diff = time_now - time_start;
+        //if (ctx.my_rank() == 0) {
+        //    std::cout << "step " << iter << ", time: " << diff.count() << " s" << std::endl;
+        //}
     }
 
     return KMeansModel<Point>(
@@ -264,89 +262,97 @@ auto KMeans(const DIA<Point, InStack>& input_points, size_t dimensions,
         local_centroids);
 }
 
-//! Calculate k-Means using bisecting method
-template <typename Point, typename InStack>
-auto BisecKMeans(const DIA<Point, InStack>& input_points, size_t dimensions,
-                 size_t num_clusters, size_t iterations, double epsilon) {
+template <typename Point>
+static void RunKMeansFile(
+    thrill::Context& ctx,
+    size_t dimensions, size_t num_clusters, size_t iterations, double eps,
+    const std::vector<std::string>& input_paths) {
 
-    using ClosestCentroid = ClosestCentroid<Point>;
-    using CentroidAccumulated = CentroidAccumulated<Point>;
+    common::StatsTimerStart timer;
+    auto points =
+        ReadLines(ctx, input_paths).Map(
+            [dimensions](const std::string& input) {
+                // parse "<pt> <pt> <pt> ..." lines
+                Point p = Point::Make(dimensions);
+                char* endptr = const_cast<char*>(input.c_str());
+                // jump first item
+                while (*endptr != ' ') ++endptr;
+                for (size_t i = 0; i < dimensions; ++i) {
+                    while (*endptr == ' ') ++endptr;
+                    p.x[i] = std::strtod(endptr, &endptr);
+                    if (!endptr || (*endptr != ' ' && i != dimensions - 1)) {
+                        die("Could not parse point coordinates: " << input);
+                    }
+                }
+                while (*endptr == ' ') ++endptr;
+                if (!endptr || *endptr != 0) {
+                    die("Could not parse point coordinates: " << input);
+                }
+                return p;
+            });
 
-    //! initial cluster size
-    size_t initial_size = num_clusters <= 2 ? num_clusters : 2;
+    auto result = KMeans(points.Keep(), dimensions, num_clusters, iterations, eps);
 
-    //! model that is steadily updated and returned to the calling function
-    auto result_model =
-        KMeans(input_points, dimensions, initial_size, iterations, epsilon);
+    double cost = result.ComputeCost(points.Keep());
+    if (ctx.my_rank() == 0)
+        std::cout << "k-means cost: " << cost << std::endl;
 
-    for (size_t size = initial_size; size < num_clusters; ++size) {
-
-        // Classify all points for the current k-Means model
-        auto classified_points =
-            result_model.ClassifyPairs(input_points)
-            .Map([](const PointClusterId<Point>& pci) {
-                     return ClosestCentroid {
-                         pci.second,
-                         CentroidAccumulated { pci.first, 1 }
-                     };
-                 });
-
-        // Create a vector containing the cluster IDs and the number
-        // of closest points in order to determine the biggest cluster
-        size_t biggest_cluster_idx =
-            classified_points
-            .ReduceByKey(
-                [](const ClosestCentroid& cc) { return cc.cluster_id; },
-                [](const ClosestCentroid& a, const ClosestCentroid& b) {
-                    return ClosestCentroid {
-                        a.cluster_id,
-                        CentroidAccumulated { a.center.p,
-                                              a.center.count + b.center.count }
-                    };
-                })
-            .AllReduce(
-                [](const ClosestCentroid& cc1, const ClosestCentroid& cc2) {
-                    return cc1.center.count > cc2.center.count ? cc1 : cc2;
-                })
-            .cluster_id;
-
-        // Filter the points of the biggest cluster for a further split
-        auto filtered_points =
-            classified_points
-            .Filter(
-                [biggest_cluster_idx](const ClosestCentroid& cc) {
-                    return cc.cluster_id == biggest_cluster_idx;
-                })
-            .Map(
-                [](const ClosestCentroid& cc) {
-                    return cc.center.p;
-                });
-
-        // Compute two new cluster by splitting the biggest one
-        std::vector<Point> tmp_model_centroids =
-            KMeans(filtered_points, dimensions, 2, iterations, epsilon)
-            .centroids();
-
-        // Delete the centroid of the biggest cluster
-        // Add two new centroids calculated in the previous step
-        std::vector<Point> result_model_centroids = result_model.centroids();
-        result_model_centroids.erase(
-            result_model_centroids.begin() + biggest_cluster_idx);
-        result_model_centroids.insert(
-            result_model_centroids.end(),
-            tmp_model_centroids.begin(), tmp_model_centroids.end());
-
-        // Update centroids of the result_model
-        result_model = KMeansModel<Point>(
-            dimensions, num_clusters, iterations, result_model_centroids);
-    }
-
-    return result_model;
+    ctx.net.Barrier();
+    timer.Stop();
+    //if (ctx.my_rank() == 0) {
+    //    auto traffic = ctx.net_manager().Traffic();
+    //    std::cout << "RESULT"
+    //         << " benchmark=k-means"
+    //         << " bisecting=" << bisecting
+    //         << " dimensions=" << dimensions
+    //         << " num_clusters=" << num_clusters
+    //         << " iterations=" << iterations
+    //         << " eps=" << eps
+    //         << " cost=" << cost
+    //         << " time=" << timer
+    //         << " traffic=" << traffic.total()
+    //         << " hosts=" << ctx.num_hosts();
+    //}
 }
 
-} // namespace k_means
-} // namespace examples
+int main(int argc, char* argv[]) {
 
-#endif // !THRILL_EXAMPLES_K_MEANS_K_MEANS_HEADER
+    tlx::CmdlineParser clp;
+
+    size_t iterations = 10;
+    clp.add_size_t('n', "iterations", iterations,
+                   "iterations, default: 10");
+
+    size_t dimensions = 64;
+    clp.add_param_size_t("dim", dimensions,
+                         "dimensions of points 2-10, default: 2");
+
+    size_t num_clusters;
+    clp.add_param_size_t("clusters", num_clusters, "Number of clusters");
+
+    double epsilon = 0;
+    clp.add_double('e', "epsilon", epsilon,
+                   "centroid position delta for break condition, default: 0");
+
+    std::vector<std::string> input_paths;
+    clp.add_param_stringlist("input", input_paths,
+                             "input file pattern(s)");
+
+    if (!clp.process(argc, argv)) {
+        return -1;
+    }
+
+    clp.print_result();
+
+    auto start_func =
+        [&](thrill::Context& ctx) {
+            ctx.enable_consume();
+            RunKMeansFile<Point<64> >(
+                ctx, dimensions, num_clusters, iterations,
+                epsilon, input_paths);
+        };
+
+    return thrill::Run(start_func);
+}
 
 /******************************************************************************/

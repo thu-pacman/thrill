@@ -39,14 +39,9 @@ static void RunWordCount(
     const std::vector<std::string>& input_filelist, const std::string& output) {
     ctx.enable_consume();
 
-    auto lines = ReadLines(ctx, input_filelist).Keep();
-    size_t count = lines.Size();
-
-    if (ctx.my_rank() == 0) {
-        std::cout << "whole count is " << count << std::endl;
-    }
-
     common::StatsTimerStart timer;
+
+    auto lines = ReadLines(ctx, input_filelist);
 
     auto word_pairs = WordCount(lines);
 
@@ -64,12 +59,13 @@ static void RunWordCount(
     timer.Stop();
     if (ctx.my_rank() == 0) {
         std::cout << "RESULT"
-                << " benchmark=wordcount"
-                << " files=" << input_filelist.size()
-                << " time=" << timer
-                << " traffic=" << ctx.net_manager().Traffic()
-                << " hosts=" << ctx.num_hosts();
+             << " benchmark=wordcount"
+             << " files=" << input_filelist.size()
+             << " time=" << timer
+             << " traffic=" << ctx.net_manager().Traffic()
+             << " hosts=" << ctx.num_hosts();
     }
+
 }
 
 static void RunHashWordCount(

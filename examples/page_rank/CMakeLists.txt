@@ -10,6 +10,7 @@
 
 thrill_build_prog(page_rank_run)
 thrill_build_prog(page_rank_run_end)
+thrill_build_prog(page_rank_run_small)
 thrill_build_prog(zipf_graph_gen)
 
 ################################################################################

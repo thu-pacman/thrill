@@ -25,6 +25,7 @@
 #include <functional>
 #include <numeric>
 #include <utility>
+#include <chrono>
 
 #define LOGM LOGC(debug && ctx.my_rank() == 0)
 
@@ -67,12 +68,16 @@ template <typename T, size_t dim, typename InStack,
 auto logit_train(const DIA<std::pair<bool, Element>, InStack>& data,
                  size_t max_iterations, double gamma = 0.002,
                  double epsilon = 0.0001) {
+    thrill::api::Context& ctx = data.context();
+
     // weights, initialized to zero
     Element weights, new_weights;
-    weights[0] = weights[1] = weights[2] = 0;
+    for (int i = 0; i < dim; ++i)
+        weights[i] = 0.0;
     size_t iter = 0;
     T norm = 0.0;
 
+    auto time_start = std::chrono::high_resolution_clock::now();
     while (iter < max_iterations) {
         Element grad =
             data.Keep()
@@ -91,11 +96,16 @@ auto logit_train(const DIA<std::pair<bool, Element>, InStack>& data,
                        [&gamma](const T& a, const T& b) -> T
                        { return a - gamma * b; });
 
-        norm = calc_norm(new_weights, weights);
+        //norm = calc_norm(new_weights, weights);
         weights = new_weights;
 
+        auto time_now = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double> diff = time_now - time_start;
+        if (ctx.my_rank() == 0) {
+            std::cout << "step " << iter << ", time: " << diff.count() << " s" << std::endl;
+        }
         iter++;
-        if (norm < epsilon) break;
+        //if (norm < epsilon) break;
     }
 
     return std::make_tuple(weights, norm, iter);
