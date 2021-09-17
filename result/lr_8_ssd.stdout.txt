@@ -1,0 +1,133 @@
+Hosts: bic01 bic02 bic03 bic04 bic05 bic07 bic08 bic09
+Command: /home/ybw/Reproduce/thrill/original-build/examples/logistic_regression/logistic_regression_run
+Connecting to ybw@bic01 to invoke /home/ybw/Reproduce/thrill/original-build/examples/logistic_regression/logistic_regression_run
+Connecting to ybw@bic02 to invoke /home/ybw/Reproduce/thrill/original-build/examples/logistic_regression/logistic_regression_run
+Connecting to ybw@bic03 to invoke /home/ybw/Reproduce/thrill/original-build/examples/logistic_regression/logistic_regression_run
+Connecting to ybw@bic04 to invoke /home/ybw/Reproduce/thrill/original-build/examples/logistic_regression/logistic_regression_run
+Connecting to ybw@bic05 to invoke /home/ybw/Reproduce/thrill/original-build/examples/logistic_regression/logistic_regression_run
+Connecting to ybw@bic07 to invoke /home/ybw/Reproduce/thrill/original-build/examples/logistic_regression/logistic_regression_run
+Connecting to ybw@bic08 to invoke /home/ybw/Reproduce/thrill/original-build/examples/logistic_regression/logistic_regression_run
+Connecting to ybw@bic09 to invoke /home/ybw/Reproduce/thrill/original-build/examples/logistic_regression/logistic_regression_run
+Waiting for execution to finish.
+Parameters:
+  input             (string)            "hdfs://bic07/user/ybw/ssd/Dataset/MNIST01-12665-10k-784.text"
+Options:
+  -n, --iterations  (size_t)            10
+  -g, --gamma       (double)            1
+  -e, --epsilon     (double)            1e-07
+  -G, --generate    (bool)              false
+Parameters:
+  input             (string)            "hdfs://bic07/user/ybw/ssd/Dataset/MNIST01-12665-10k-784.text"
+Options:
+  -n, --iterations  (size_t)            10
+  -g, --gamma       (double)            1
+  -e, --epsilon     (double)            1e-07
+  -G, --generate    (bool)              false
+Parameters:
+  input             (string)            "hdfs://bic07/user/ybw/ssd/Dataset/MNIST01-12665-10k-784.text"
+Options:
+  -n, --iterations  (size_t)            10
+  -g, --gamma       (double)            1
+  -e, --epsilon     (double)            1e-07
+  -G, --generate    (bool)              false
+Parameters:
+  input             (string)            "hdfs://bic07/user/ybw/ssd/Dataset/MNIST01-12665-10k-784.text"
+Options:
+  -n, --iterations  (size_t)            10
+  -g, --gamma       (double)            1
+  -e, --epsilon     (double)            1e-07
+  -G, --generate    (bool)              false
+Parameters:
+  input             (string)            "hdfs://bic07/user/ybw/ssd/Dataset/MNIST01-12665-10k-784.text"
+Options:
+  -n, --iterations  (size_t)            10
+  -g, --gamma       (double)            1
+  -e, --epsilon     (double)            1e-07
+  -G, --generate    (bool)              false
+Parameters:
+  input             (string)            "hdfs://bic07/user/ybw/ssd/Dataset/MNIST01-12665-10k-784.text"
+Options:
+  -n, --iterations  (size_t)            10
+  -g, --gamma       (double)            1
+  -e, --epsilon     (double)            1e-07
+  -G, --generate    (bool)              false
+Parameters:
+  input             (string)            "hdfs://bic07/user/ybw/ssd/Dataset/MNIST01-12665-10k-784.text"
+Options:
+  -n, --iterations  (size_t)            10
+  -g, --gamma       (double)            1
+  -e, --epsilon     (double)            1e-07
+  -G, --generate    (bool)              false
+Parameters:
+  input             (string)            "hdfs://bic07/user/ybw/ssd/Dataset/MNIST01-12665-10k-784.text"
+Options:
+  -n, --iterations  (size_t)            10
+  -g, --gamma       (double)            1
+  -e, --epsilon     (double)            1e-07
+  -G, --generate    (bool)              false
+[main 000000] FOXXLL v1.4.99 (prerelease/Release) (git a4a8aeee64743f845c5851e8b089965ea1c219d7)
+[main 000001] foxxll: Using default disk configuration.
+[main 000002] foxxll: Disk '/var/tmp/thrill.99079.tmp' is allocated, space: 1000 MiB, I/O implementation: syscall queue=0 devid=0 unlink_on_open
+[main 000000] FOXXLL v1.4.99 (prerelease/Release) (git a4a8aeee64743f845c5851e8b089965ea1c219d7)
+[main 000001] foxxll: Using default disk configuration.
+[main 000002] foxxll: Disk '/var/tmp/thrill.48393.tmp' is allocated, space: 1000 MiB, I/O implementation: syscall queue=0 devid=0 unlink_on_open
+[worker 0 000000] Execute()  stage ReadLines.1
+[worker 0 000001] PushData() stage ReadLines.1 with targets [Cache.3]
+[main 000000] FOXXLL v1.4.99 (prerelease/Release) (git a4a8aeee64743f845c5851e8b089965ea1c219d7)
+[main 000001] foxxll: Using default disk configuration.
+[main 000002] foxxll: Disk '/var/tmp/thrill.80338.tmp' is allocated, space: 1000 MiB, I/O implementation: syscall queue=0 devid=0 unlink_on_open
+[main 000000] FOXXLL v1.4.99 (prerelease/Release) (git a4a8aeee64743f845c5851e8b089965ea1c219d7)
+[main 000001] foxxll: Using default disk configuration.
+[main 000002] foxxll: Disk '/var/tmp/thrill.140626.tmp' is allocated, space: 1000 MiB, I/O implementation: syscall queue=0 devid=0 unlink_on_open
+[main 000000] FOXXLL v1.4.99 (prerelease/Release) (git a4a8aeee64743f845c5851e8b089965ea1c219d7)
+[main 000001] foxxll: Using default disk configuration.
+[main 000002] foxxll: Disk '/var/tmp/thrill.150903.tmp' is allocated, space: 1000 MiB, I/O implementation: syscall queue=0 devid=0 unlink_on_open
+[main 000000] FOXXLL v1.4.99 (prerelease/Release) (git a4a8aeee64743f845c5851e8b089965ea1c219d7)
+[main 000001] foxxll: Using default disk configuration.
+[main 000002] foxxll: Disk '/var/tmp/thrill.34417.tmp' is allocated, space: 1000 MiB, I/O implementation: syscall queue=0 devid=0 unlink_on_open
+[main 000000] FOXXLL v1.4.99 (prerelease/Release) (git a4a8aeee64743f845c5851e8b089965ea1c219d7)
+[main 000000] FOXXLL v1.4.99 (prerelease/Release) (git a4a8aeee64743f845c5851e8b089965ea1c219d7)
+[main 000001] foxxll: Using default disk configuration.
+[main 000002] foxxll: Disk '/var/tmp/thrill.166421.tmp' is allocated, space: 1000 MiB, I/O implementation: syscall queue=0 devid=0 unlink_on_open
+[main 000001] foxxll: Using default disk configuration.
+[main 000002] foxxll: Disk '/var/tmp/thrill.95964.tmp' is allocated, space: 1000 MiB, I/O implementation: syscall queue=0 devid=0 unlink_on_open
+[worker 0 000002] Execute()  stage Cache.3
+[worker 0 000003] PushData() stage Cache.3 with targets [Sum.5]
+[worker 0 000004] Execute()  stage Sum.5
+step 0, time: 44.1937 s
+[worker 0 000005] PushData() stage Cache.3 with targets [Sum.7]
+[worker 0 000006] Execute()  stage Sum.7
+step 1, time: 46.9363 s
+[worker 0 000007] PushData() stage Cache.3 with targets [Sum.9]
+[worker 0 000008] Execute()  stage Sum.9
+step 2, time: 48.7725 s
+[worker 0 000009] PushData() stage Cache.3 with targets [Sum.11]
+[worker 0 000010] Execute()  stage Sum.11
+step 3, time: 50.7266 s
+[worker 0 000011] PushData() stage Cache.3 with targets [Sum.13]
+[worker 0 000012] Execute()  stage Sum.13
+step 4, time: 52.8065 s
+[worker 0 000013] PushData() stage Cache.3 with targets [Sum.15]
+[worker 0 000014] Execute()  stage Sum.15
+step 5, time: 54.8829 s
+[worker 0 000015] PushData() stage Cache.3 with targets [Sum.17]
+[worker 0 000016] Execute()  stage Sum.17
+step 6, time: 56.7936 s
+[worker 0 000017] PushData() stage Cache.3 with targets [Sum.19]
+[worker 0 000018] Execute()  stage Sum.19
+step 7, time: 58.5969 s
+[worker 0 000019] PushData() stage Cache.3 with targets [Sum.21]
+[worker 0 000020] Execute()  stage Sum.21
+step 8, time: 60.393 s
+[worker 0 000021] PushData() stage Cache.3 with targets [Sum.23]
+[worker 0 000022] Execute()  stage Sum.23
+step 9, time: 62.195 s
+Iterations: 10
+Norm: 0
+Final weights (model):
+Model[0] = 0
+Model[1] = 0
+Model[2] = 0
+whole time: 72.804
+[worker 0 000023] Manager::Traffic() tx/rx asymmetry = 1344
+Done. Result 0

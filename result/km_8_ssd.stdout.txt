@@ -1,0 +1,185 @@
+Hosts: bic01 bic02 bic03 bic04 bic05 bic07 bic08 bic09
+Command: /home/ybw/Reproduce/thrill/original-build/examples/k-means/k-means_run
+Connecting to ybw@bic01 to invoke /home/ybw/Reproduce/thrill/original-build/examples/k-means/k-means_run
+Connecting to ybw@bic02 to invoke /home/ybw/Reproduce/thrill/original-build/examples/k-means/k-means_run
+Connecting to ybw@bic03 to invoke /home/ybw/Reproduce/thrill/original-build/examples/k-means/k-means_run
+Connecting to ybw@bic04 to invoke /home/ybw/Reproduce/thrill/original-build/examples/k-means/k-means_run
+Connecting to ybw@bic05 to invoke /home/ybw/Reproduce/thrill/original-build/examples/k-means/k-means_run
+Connecting to ybw@bic07 to invoke /home/ybw/Reproduce/thrill/original-build/examples/k-means/k-means_run
+Connecting to ybw@bic08 to invoke /home/ybw/Reproduce/thrill/original-build/examples/k-means/k-means_run
+Connecting to ybw@bic09 to invoke /home/ybw/Reproduce/thrill/original-build/examples/k-means/k-means_run
+Waiting for execution to finish.
+Parameters:
+  dim               (size_t)            64
+  clusters          (size_t)            500
+  input             (string list)       ["hdfs://bic07/user/lixiaohan/data-kmeans/data-Kmeans-80000000-64"]
+Options:
+  -g, --generate    (bool)              false
+  -b, --bisecting   (bool)              false
+  -n, --iterations  (size_t)            10
+  -e, --epsilon     (double)            0
+  -s, --svg         (string)            ""
+  -S, --svg-scale   (double)            1
+Parameters:
+  dim               (size_t)            64
+  clusters          (size_t)            500
+  input             (string list)       ["hdfs://bic07/user/lixiaohan/data-kmeans/data-Kmeans-80000000-64"]
+Options:
+  -g, --generate    (bool)              false
+  -b, --bisecting   (bool)              false
+  -n, --iterations  (size_t)            10
+  -e, --epsilon     (double)            0
+  -s, --svg         (string)            ""
+  -S, --svg-scale   (double)            1
+Parameters:
+  dim               (size_t)            64
+  clusters          (size_t)            500
+  input             (string list)       ["hdfs://bic07/user/lixiaohan/data-kmeans/data-Kmeans-80000000-64"]
+Options:
+  -g, --generate    (bool)              false
+  -b, --bisecting   (bool)              false
+  -n, --iterations  (size_t)            10
+  -e, --epsilon     (double)            0
+  -s, --svg         (string)            ""
+  -S, --svg-scale   (double)            1
+Parameters:
+  dim               (size_t)            64
+  clusters          (size_t)            500
+  input             (string list)       ["hdfs://bic07/user/lixiaohan/data-kmeans/data-Kmeans-80000000-64"]
+Options:
+  -g, --generate    (bool)              false
+  -b, --bisecting   (bool)              false
+  -n, --iterations  (size_t)            10
+  -e, --epsilon     (double)            0
+  -s, --svg         (string)            ""
+  -S, --svg-scale   (double)            1
+Parameters:
+  dim               (size_t)            64
+  clusters          (size_t)            500
+  input             (string list)       ["hdfs://bic07/user/lixiaohan/data-kmeans/data-Kmeans-80000000-64"]
+Options:
+  -g, --generate    (bool)              false
+  -b, --bisecting   (bool)              false
+  -n, --iterations  (size_t)            10
+  -e, --epsilon     (double)            0
+  -s, --svg         (string)            ""
+  -S, --svg-scale   (double)            1
+Parameters:
+  dim               (size_t)            64
+  clusters          (size_t)            500
+  input             (string list)       ["hdfs://bic07/user/lixiaohan/data-kmeans/data-Kmeans-80000000-64"]
+Options:
+  -g, --generate    (bool)              false
+  -b, --bisecting   (bool)              false
+  -n, --iterations  (size_t)            10
+  -e, --epsilon     (double)            0
+  -s, --svg         (string)            ""
+  -S, --svg-scale   (double)            1
+Parameters:
+  dim               (size_t)            64
+  clusters          (size_t)            500
+  input             (string list)       ["hdfs://bic07/user/lixiaohan/data-kmeans/data-Kmeans-80000000-64"]
+Options:
+  -g, --generate    (bool)              false
+  -b, --bisecting   (bool)              false
+  -n, --iterations  (size_t)            10
+  -e, --epsilon     (double)            0
+  -s, --svg         (string)            ""
+  -S, --svg-scale   (double)            1
+Parameters:
+  dim               (size_t)            64
+  clusters          (size_t)            500
+  input             (string list)       ["hdfs://bic07/user/lixiaohan/data-kmeans/data-Kmeans-80000000-64"]
+Options:
+  -g, --generate    (bool)              false
+  -b, --bisecting   (bool)              false
+  -n, --iterations  (size_t)            10
+  -e, --epsilon     (double)            0
+  -s, --svg         (string)            ""
+  -S, --svg-scale   (double)            1
+[main 000000] FOXXLL v1.4.99 (prerelease/Release) (git a4a8aeee64743f845c5851e8b089965ea1c219d7)
+[main 000000] FOXXLL v1.4.99 (prerelease/Release) (git a4a8aeee64743f845c5851e8b089965ea1c219d7)
+[main 000001] foxxll: Using default disk configuration.
+[main 000001] foxxll: Using default disk configuration.
+[main 000002] foxxll: Disk '/var/tmp/thrill.47080.tmp' is allocated, space: 1000 MiB, I/O implementation: syscall queue=0 devid=0 unlink_on_open
+[main 000002] foxxll: Disk '/var/tmp/thrill.33173.tmp' is allocated, space: 1000 MiB, I/O implementation: syscall queue=0 devid=0 unlink_on_open
+[main 000000] FOXXLL v1.4.99 (prerelease/Release) (git a4a8aeee64743f845c5851e8b089965ea1c219d7)
+[main 000001] foxxll: Using default disk configuration.
+[main 000002] foxxll: Disk '/var/tmp/thrill.97842.tmp' is allocated, space: 1000 MiB, I/O implementation: syscall queue=0 devid=0 unlink_on_open
+[main 000000] FOXXLL v1.4.99 (prerelease/Release) (git a4a8aeee64743f845c5851e8b089965ea1c219d7)
+[main 000001] foxxll: Using default disk configuration.
+[main 000000] FOXXLL v1.4.99 (prerelease/Release) (git a4a8aeee64743f845c5851e8b089965ea1c219d7)
+[main 000001] foxxll: Using default disk configuration.
+[main 000002] foxxll: Disk '/var/tmp/thrill.139390.tmp' is allocated, space: 1000 MiB, I/O implementation: syscall queue=0 devid=0 unlink_on_open
+[main 000002] foxxll: Disk '/var/tmp/thrill.78979.tmp' is allocated, space: 1000 MiB, I/O implementation: syscall queue=0 devid=0 unlink_on_open
+[main 000000] FOXXLL v1.4.99 (prerelease/Release) (git a4a8aeee64743f845c5851e8b089965ea1c219d7)
+[main 000001] foxxll: Using default disk configuration.
+[main 000002] foxxll: Disk '/var/tmp/thrill.165111.tmp' is allocated, space: 1000 MiB, I/O implementation: syscall queue=0 devid=0 unlink_on_open
+[main 000000] FOXXLL v1.4.99 (prerelease/Release) (git a4a8aeee64743f845c5851e8b089965ea1c219d7)
+[main 000000] FOXXLL v1.4.99 (prerelease/Release) (git a4a8aeee64743f845c5851e8b089965ea1c219d7)
+[main 000001] foxxll: Using default disk configuration.
+[main 000002] foxxll: Disk '/var/tmp/thrill.149623.tmp' is allocated, space: 1000 MiB, I/O implementation: syscall queue=0 devid=0 unlink_on_open
+[main 000001] foxxll: Using default disk configuration.
+[main 000002] foxxll: Disk '/var/tmp/thrill.94788.tmp' is allocated, space: 1000 MiB, I/O implementation: syscall queue=0 devid=0 unlink_on_open
+[worker 0 000000] Execute()  stage ReadLines.1
+[worker 0 000001] PushData() stage ReadLines.1 with targets [Cache.3]
+[worker 0 000002] Execute()  stage Cache.3
+[worker 0 000003] PushData() stage Cache.3 with targets [Sample.4]
+[worker 0 000004] Execute()  stage Sample.4
+[worker 0 000005] PushData() stage Sample.4 with targets [AllGather.5]
+[worker 0 000006] Execute()  stage AllGather.5
+[worker 0 000007] PushData() stage Cache.3 with targets [ReduceByKey.7]
+[worker 0 000008] Execute()  stage ReduceByKey.7
+[worker 0 000009] PushData() stage ReduceByKey.7 with targets [Collapse.9 [AllGather.10]]
+[worker 0 000010] Execute()  stage AllGather.10
+step 0, time: 8.96128 s
+[worker 0 000011] PushData() stage Cache.3 with targets [ReduceByKey.12]
+[worker 0 000012] Execute()  stage ReduceByKey.12
+[worker 0 000013] PushData() stage ReduceByKey.12 with targets [Collapse.14 [AllGather.15]]
+[worker 0 000014] Execute()  stage AllGather.15
+step 1, time: 17.9225 s
+[worker 0 000015] PushData() stage Cache.3 with targets [ReduceByKey.17]
+[worker 0 000016] Execute()  stage ReduceByKey.17
+[worker 0 000017] PushData() stage ReduceByKey.17 with targets [Collapse.19 [AllGather.20]]
+[worker 0 000018] Execute()  stage AllGather.20
+step 2, time: 26.8617 s
+[worker 0 000019] PushData() stage Cache.3 with targets [ReduceByKey.22]
+[worker 0 000020] Execute()  stage ReduceByKey.22
+[worker 0 000021] PushData() stage ReduceByKey.22 with targets [Collapse.24 [AllGather.25]]
+[worker 0 000022] Execute()  stage AllGather.25
+step 3, time: 35.7026 s
+[worker 0 000023] PushData() stage Cache.3 with targets [ReduceByKey.27]
+[worker 0 000024] Execute()  stage ReduceByKey.27
+[worker 0 000025] PushData() stage ReduceByKey.27 with targets [Collapse.29 [AllGather.30]]
+[worker 0 000026] Execute()  stage AllGather.30
+step 4, time: 44.6281 s
+[worker 0 000027] PushData() stage Cache.3 with targets [ReduceByKey.32]
+[worker 0 000028] Execute()  stage ReduceByKey.32
+[worker 0 000029] PushData() stage ReduceByKey.32 with targets [Collapse.34 [AllGather.35]]
+[worker 0 000030] Execute()  stage AllGather.35
+step 5, time: 53.5569 s
+[worker 0 000031] PushData() stage Cache.3 with targets [ReduceByKey.37]
+[worker 0 000032] Execute()  stage ReduceByKey.37
+[worker 0 000033] PushData() stage ReduceByKey.37 with targets [Collapse.39 [AllGather.40]]
+[worker 0 000034] Execute()  stage AllGather.40
+step 6, time: 62.5088 s
+[worker 0 000035] PushData() stage Cache.3 with targets [ReduceByKey.42]
+[worker 0 000036] Execute()  stage ReduceByKey.42
+[worker 0 000037] PushData() stage ReduceByKey.42 with targets [Collapse.44 [AllGather.45]]
+[worker 0 000038] Execute()  stage AllGather.45
+step 7, time: 71.5123 s
+[worker 0 000039] PushData() stage Cache.3 with targets [ReduceByKey.47]
+[worker 0 000040] Execute()  stage ReduceByKey.47
+[worker 0 000041] PushData() stage ReduceByKey.47 with targets [Collapse.49 [AllGather.50]]
+[worker 0 000042] Execute()  stage AllGather.50
+step 8, time: 80.5199 s
+[worker 0 000043] PushData() stage Cache.3 with targets [ReduceByKey.52]
+[worker 0 000044] Execute()  stage ReduceByKey.52
+[worker 0 000045] PushData() stage ReduceByKey.52 with targets [Collapse.54 [AllGather.55]]
+[worker 0 000046] Execute()  stage AllGather.55
+step 9, time: 89.9697 s
+[worker 0 000047] PushData() stage ReadLines.1 with targets [Sum.57]
+[worker 0 000048] Execute()  stage Sum.57
+k-means cost: 9.30432e+08
+RESULT benchmark=k-means bisecting=0 dimensions=64 num_clusters=500 iterations=10 eps=0 cost=9.30432e+08 time=112.369 traffic=137842190 hosts=8[worker 0 000049] Manager::Traffic() tx/rx asymmetry = 1344
+Done. Result 0

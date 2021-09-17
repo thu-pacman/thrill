@@ -1,0 +1,270 @@
+Hosts: bic01 bic02 bic03 bic04 bic05 bic07 bic08 bic09
+Command: /home/ybw/Reproduce/thrill/original-build/examples/terasort/CC
+Connecting to ybw@bic01 to invoke /home/ybw/Reproduce/thrill/original-build/examples/terasort/CC
+Connecting to ybw@bic02 to invoke /home/ybw/Reproduce/thrill/original-build/examples/terasort/CC
+Connecting to ybw@bic03 to invoke /home/ybw/Reproduce/thrill/original-build/examples/terasort/CC
+Connecting to ybw@bic04 to invoke /home/ybw/Reproduce/thrill/original-build/examples/terasort/CC
+Connecting to ybw@bic05 to invoke /home/ybw/Reproduce/thrill/original-build/examples/terasort/CC
+Connecting to ybw@bic07 to invoke /home/ybw/Reproduce/thrill/original-build/examples/terasort/CC
+Connecting to ybw@bic08 to invoke /home/ybw/Reproduce/thrill/original-build/examples/terasort/CC
+Connecting to ybw@bic09 to invoke /home/ybw/Reproduce/thrill/original-build/examples/terasort/CC
+Waiting for execution to finish.
+Parameters:
+  input   (string list)       ["hdfs://bic07/user/ybw/ssd/Dataset/twitter-2010.text"]
+Parameters:
+  input   (string list)       ["hdfs://bic07/user/ybw/ssd/Dataset/twitter-2010.text"]
+Parameters:
+  input   (string list)       ["hdfs://bic07/user/ybw/ssd/Dataset/twitter-2010.text"]
+Parameters:
+  input   (string list)       ["hdfs://bic07/user/ybw/ssd/Dataset/twitter-2010.text"]
+Parameters:
+  input   (string list)       ["hdfs://bic07/user/ybw/ssd/Dataset/twitter-2010.text"]
+Parameters:
+  input   (string list)       ["hdfs://bic07/user/ybw/ssd/Dataset/twitter-2010.text"]
+Parameters:
+  input   (string list)       ["hdfs://bic07/user/ybw/ssd/Dataset/twitter-2010.text"]
+Parameters:
+  input   (string list)       ["hdfs://bic07/user/ybw/ssd/Dataset/twitter-2010.text"]
+[main 000000] FOXXLL v1.4.99 (prerelease/Release) (git a4a8aeee64743f845c5851e8b089965ea1c219d7)
+[main 000001] foxxll: Using default disk configuration.
+[main 000002] foxxll: Disk '/var/tmp/thrill.130851.tmp' is allocated, space: 1000 MiB, I/O implementation: syscall queue=0 devid=0 unlink_on_open
+[main 000000] FOXXLL v1.4.99 (prerelease/Release) (git a4a8aeee64743f845c5851e8b089965ea1c219d7)
+[main 000001] foxxll: Using default disk configuration.
+[main 000002] foxxll: Disk '/var/tmp/thrill.69891.tmp' is allocated, space: 1000 MiB, I/O implementation: syscall queue=0 devid=0 unlink_on_open
+[main 000000] FOXXLL v1.4.99 (prerelease/Release) (git a4a8aeee64743f845c5851e8b089965ea1c219d7)
+[main 000001] foxxll: Using default disk configuration.
+[main 000002] foxxll: Disk '/var/tmp/thrill.38043.tmp' is allocated, space: 1000 MiB, I/O implementation: syscall queue=0 devid=0 unlink_on_open
+[main 000000] FOXXLL v1.4.99 (prerelease/Release) (git a4a8aeee64743f845c5851e8b089965ea1c219d7)
+[main 000001] foxxll: Using default disk configuration.
+[main 000002] foxxll: Disk '/var/tmp/thrill.140819.tmp' is allocated, space: 1000 MiB, I/O implementation: syscall queue=0 devid=0 unlink_on_open
+[main 000000] FOXXLL v1.4.99 (prerelease/Release) (git a4a8aeee64743f845c5851e8b089965ea1c219d7)
+[main 000001] foxxll: Using default disk configuration.
+[main 000002] foxxll: Disk '/var/tmp/thrill.156191.tmp' is allocated, space: 1000 MiB, I/O implementation: syscall queue=0 devid=0 unlink_on_open
+[main 000000] FOXXLL v1.4.99 (prerelease/Release) (git a4a8aeee64743f845c5851e8b089965ea1c219d7)
+[main 000001] foxxll: Using default disk configuration.
+[main 000002] foxxll: Disk '/var/tmp/thrill.86379.tmp' is allocated, space: 1000 MiB, I/O implementation: syscall queue=0 devid=0 unlink_on_open
+[main 000000] FOXXLL v1.4.99 (prerelease/Release) (git a4a8aeee64743f845c5851e8b089965ea1c219d7)
+[main 000000] FOXXLL v1.4.99 (prerelease/Release) (git a4a8aeee64743f845c5851e8b089965ea1c219d7)
+[main 000001] foxxll: Using default disk configuration.
+[main 000002] foxxll: Disk '/var/tmp/thrill.23885.tmp' is allocated, space: 1000 MiB, I/O implementation: syscall queue=0 devid=0 unlink_on_open
+[main 000001] foxxll: Using default disk configuration.
+[main 000002] foxxll: Disk '/var/tmp/thrill.88814.tmp' is allocated, space: 1000 MiB, I/O implementation: syscall queue=0 devid=0 unlink_on_open
+[worker 0 000000] Execute()  stage ReadLines.1
+[worker 0 000001] PushData() stage ReadLines.1 with targets [Size.2]
+[worker 0 000002] Execute()  stage Size.2
+whole count is 1468365182
+[worker 0 000003] PushData() stage ReadLines.1 with targets [GroupByKey.4]
+[worker 0 000004] Execute()  stage GroupByKey.4
+[worker 0 000005] PushData() stage GroupByKey.4 with targets [Cache.5]
+[worker 0 000006] Execute()  stage Cache.5
+[worker 0 000007] PushData() stage Cache.5 with targets [Collapse.7 [Join.11 Join.8] Join.8]
+[worker 0 000008] Collapse rejected File from parent due to non-empty function stack.
+[worker 0 000009] Execute()  stage Join.8
+[worker 0 000010] PushData() stage Join.8 with targets [ReduceByKey.10]
+[worker 0 000011] Execute()  stage ReduceByKey.10
+[worker 0 000012] PushData() stage ReduceByKey.10 with targets [Join.11]
+[worker 0 000013] Execute()  stage Join.11
+[worker 0 000014] PushData() stage Join.11 with targets [Size.14]
+[worker 0 000015] Execute()  stage Size.14
+step 0, time: 32.1755, update: 41503723
+[worker 0 000016] PushData() stage Join.11 with targets [Union.15 [ReduceByKey.16]]
+[worker 0 000017] PushData() stage Cache.5 with targets [Collapse.7 [Union.15 [ReduceByKey.16]] Join.17]
+[worker 0 000018] Collapse rejected File from parent due to non-empty function stack.
+[worker 0 000019] Execute()  stage ReduceByKey.16
+[worker 0 000020] PushData() stage ReduceByKey.16 with targets [Join.17 Join.20]
+[worker 0 000021] Execute()  stage Join.17
+[worker 0 000022] PushData() stage Join.17 with targets [ReduceByKey.19]
+[worker 0 000023] Execute()  stage ReduceByKey.19
+[worker 0 000024] PushData() stage ReduceByKey.19 with targets [Join.20]
+[worker 0 000025] Execute()  stage Join.20
+[worker 0 000026] PushData() stage Join.20 with targets [Size.23]
+[worker 0 000027] Execute()  stage Size.23
+step 1, time: 45.5201, update: 41433619
+[worker 0 000028] PushData() stage Join.20 with targets [Union.24 [ReduceByKey.25]]
+[worker 0 000029] PushData() stage ReduceByKey.16 with targets [Union.24 [ReduceByKey.25]]
+[worker 0 000030] Execute()  stage ReduceByKey.25
+[worker 0 000031] PushData() stage ReduceByKey.25 with targets [Join.26 Join.29]
+[worker 0 000032] PushData() stage Cache.5 with targets [Join.26]
+[worker 0 000033] Execute()  stage Join.26
+[worker 0 000034] PushData() stage Join.26 with targets [ReduceByKey.28]
+[worker 0 000035] Execute()  stage ReduceByKey.28
+[worker 0 000036] PushData() stage ReduceByKey.28 with targets [Join.29]
+[worker 0 000037] Execute()  stage Join.29
+[worker 0 000038] PushData() stage Join.29 with targets [Size.32]
+[worker 0 000039] Execute()  stage Size.32
+step 2, time: 58.2656, update: 41599411
+[worker 0 000040] PushData() stage Join.29 with targets [Union.33 [ReduceByKey.34]]
+[worker 0 000041] PushData() stage ReduceByKey.25 with targets [Union.33 [ReduceByKey.34]]
+[worker 0 000042] Execute()  stage ReduceByKey.34
+[worker 0 000043] PushData() stage ReduceByKey.34 with targets [Join.35 Join.38]
+[worker 0 000044] PushData() stage Cache.5 with targets [Join.35]
+[worker 0 000045] Execute()  stage Join.35
+[worker 0 000046] PushData() stage Join.35 with targets [ReduceByKey.37]
+[worker 0 000047] Execute()  stage ReduceByKey.37
+[worker 0 000048] PushData() stage ReduceByKey.37 with targets [Join.38]
+[worker 0 000049] Execute()  stage Join.38
+[worker 0 000050] PushData() stage Join.38 with targets [Size.41]
+[worker 0 000051] Execute()  stage Size.41
+step 3, time: 70.9345, update: 18166285
+[worker 0 000052] PushData() stage Join.38 with targets [Union.42 [ReduceByKey.43]]
+[worker 0 000053] PushData() stage ReduceByKey.34 with targets [Union.42 [ReduceByKey.43]]
+[worker 0 000054] Execute()  stage ReduceByKey.43
+[worker 0 000055] PushData() stage ReduceByKey.43 with targets [Join.44 Join.47]
+[worker 0 000056] PushData() stage Cache.5 with targets [Join.44]
+[worker 0 000057] Execute()  stage Join.44
+[worker 0 000058] PushData() stage Join.44 with targets [ReduceByKey.46]
+[worker 0 000059] Execute()  stage ReduceByKey.46
+[worker 0 000060] PushData() stage ReduceByKey.46 with targets [Join.47]
+[worker 0 000061] Execute()  stage Join.47
+[worker 0 000062] PushData() stage Join.47 with targets [Size.50]
+[worker 0 000063] Execute()  stage Size.50
+step 4, time: 83.5645, update: 1389775
+[worker 0 000064] PushData() stage Join.47 with targets [Union.51 [ReduceByKey.52]]
+[worker 0 000065] PushData() stage ReduceByKey.43 with targets [Union.51 [ReduceByKey.52]]
+[worker 0 000066] Execute()  stage ReduceByKey.52
+[worker 0 000067] PushData() stage ReduceByKey.52 with targets [Join.53 Join.56]
+[worker 0 000068] PushData() stage Cache.5 with targets [Join.53]
+[worker 0 000069] Execute()  stage Join.53
+[worker 0 000070] PushData() stage Join.53 with targets [ReduceByKey.55]
+[worker 0 000071] Execute()  stage ReduceByKey.55
+[worker 0 000072] PushData() stage ReduceByKey.55 with targets [Join.56]
+[worker 0 000073] Execute()  stage Join.56
+[worker 0 000074] PushData() stage Join.56 with targets [Size.59]
+[worker 0 000075] Execute()  stage Size.59
+step 5, time: 96.4429, update: 32074
+[worker 0 000076] PushData() stage Join.56 with targets [Union.60 [ReduceByKey.61]]
+[worker 0 000077] PushData() stage ReduceByKey.52 with targets [Union.60 [ReduceByKey.61]]
+[worker 0 000078] Execute()  stage ReduceByKey.61
+[worker 0 000079] PushData() stage ReduceByKey.61 with targets [Join.62 Join.65]
+[worker 0 000080] PushData() stage Cache.5 with targets [Join.62]
+[worker 0 000081] Execute()  stage Join.62
+[worker 0 000082] PushData() stage Join.62 with targets [ReduceByKey.64]
+[worker 0 000083] Execute()  stage ReduceByKey.64
+[worker 0 000084] PushData() stage ReduceByKey.64 with targets [Join.65]
+[worker 0 000085] Execute()  stage Join.65
+[worker 0 000086] PushData() stage Join.65 with targets [Size.68]
+[worker 0 000087] Execute()  stage Size.68
+step 6, time: 109.119, update: 1747
+[worker 0 000088] PushData() stage Join.65 with targets [Union.69 [ReduceByKey.70]]
+[worker 0 000089] PushData() stage ReduceByKey.61 with targets [Union.69 [ReduceByKey.70]]
+[worker 0 000090] Execute()  stage ReduceByKey.70
+[worker 0 000091] PushData() stage ReduceByKey.70 with targets [Join.71 Join.74]
+[worker 0 000092] PushData() stage Cache.5 with targets [Join.71]
+[worker 0 000093] Execute()  stage Join.71
+[worker 0 000094] PushData() stage Join.71 with targets [ReduceByKey.73]
+[worker 0 000095] Execute()  stage ReduceByKey.73
+[worker 0 000096] PushData() stage ReduceByKey.73 with targets [Join.74]
+[worker 0 000097] Execute()  stage Join.74
+[worker 0 000098] PushData() stage Join.74 with targets [Size.77]
+[worker 0 000099] Execute()  stage Size.77
+step 7, time: 121.594, update: 200
+[worker 0 000100] PushData() stage Join.74 with targets [Union.78 [ReduceByKey.79]]
+[worker 0 000101] PushData() stage ReduceByKey.70 with targets [Union.78 [ReduceByKey.79]]
+[worker 0 000102] Execute()  stage ReduceByKey.79
+[worker 0 000103] PushData() stage ReduceByKey.79 with targets [Join.80 Join.83]
+[worker 0 000104] PushData() stage Cache.5 with targets [Join.80]
+[worker 0 000105] Execute()  stage Join.80
+[worker 0 000106] PushData() stage Join.80 with targets [ReduceByKey.82]
+[worker 0 000107] Execute()  stage ReduceByKey.82
+[worker 0 000108] PushData() stage ReduceByKey.82 with targets [Join.83]
+[worker 0 000109] Execute()  stage Join.83
+[worker 0 000110] PushData() stage Join.83 with targets [Size.86]
+[worker 0 000111] Execute()  stage Size.86
+step 8, time: 133.984, update: 52
+[worker 0 000112] PushData() stage Join.83 with targets [Union.87 [ReduceByKey.88]]
+[worker 0 000113] PushData() stage ReduceByKey.79 with targets [Union.87 [ReduceByKey.88]]
+[worker 0 000114] Execute()  stage ReduceByKey.88
+[worker 0 000115] PushData() stage ReduceByKey.88 with targets [Join.89 Join.92]
+[worker 0 000116] PushData() stage Cache.5 with targets [Join.89]
+[worker 0 000117] Execute()  stage Join.89
+[worker 0 000118] PushData() stage Join.89 with targets [ReduceByKey.91]
+[worker 0 000119] Execute()  stage ReduceByKey.91
+[worker 0 000120] PushData() stage ReduceByKey.91 with targets [Join.92]
+[worker 0 000121] Execute()  stage Join.92
+[worker 0 000122] PushData() stage Join.92 with targets [Size.95]
+[worker 0 000123] Execute()  stage Size.95
+step 9, time: 146.698, update: 26
+[worker 0 000124] PushData() stage Join.92 with targets [Union.96 [ReduceByKey.97]]
+[worker 0 000125] PushData() stage ReduceByKey.88 with targets [Union.96 [ReduceByKey.97]]
+[worker 0 000126] Execute()  stage ReduceByKey.97
+[worker 0 000127] PushData() stage ReduceByKey.97 with targets [Join.98 Join.101]
+[worker 0 000128] PushData() stage Cache.5 with targets [Join.98]
+[worker 0 000129] Execute()  stage Join.98
+[worker 0 000130] PushData() stage Join.98 with targets [ReduceByKey.100]
+[worker 0 000131] Execute()  stage ReduceByKey.100
+[worker 0 000132] PushData() stage ReduceByKey.100 with targets [Join.101]
+[worker 0 000133] Execute()  stage Join.101
+[worker 0 000134] PushData() stage Join.101 with targets [Size.104]
+[worker 0 000135] Execute()  stage Size.104
+step 10, time: 159.463, update: 14
+[worker 0 000136] PushData() stage Join.101 with targets [Union.105 [ReduceByKey.106]]
+[worker 0 000137] PushData() stage ReduceByKey.97 with targets [Union.105 [ReduceByKey.106]]
+[worker 0 000138] Execute()  stage ReduceByKey.106
+[worker 0 000139] PushData() stage ReduceByKey.106 with targets [Join.107 Join.110]
+[worker 0 000140] PushData() stage Cache.5 with targets [Join.107]
+[worker 0 000141] Execute()  stage Join.107
+[worker 0 000142] PushData() stage Join.107 with targets [ReduceByKey.109]
+[worker 0 000143] Execute()  stage ReduceByKey.109
+[worker 0 000144] PushData() stage ReduceByKey.109 with targets [Join.110]
+[worker 0 000145] Execute()  stage Join.110
+[worker 0 000146] PushData() stage Join.110 with targets [Size.113]
+[worker 0 000147] Execute()  stage Size.113
+step 11, time: 171.97, update: 8
+[worker 0 000148] PushData() stage Join.110 with targets [Union.114 [ReduceByKey.115]]
+[worker 0 000149] PushData() stage ReduceByKey.106 with targets [Union.114 [ReduceByKey.115]]
+[worker 0 000150] Execute()  stage ReduceByKey.115
+[worker 0 000151] PushData() stage ReduceByKey.115 with targets [Join.116 Join.119]
+[worker 0 000152] PushData() stage Cache.5 with targets [Join.116]
+[worker 0 000153] Execute()  stage Join.116
+[worker 0 000154] PushData() stage Join.116 with targets [ReduceByKey.118]
+[worker 0 000155] Execute()  stage ReduceByKey.118
+[worker 0 000156] PushData() stage ReduceByKey.118 with targets [Join.119]
+[worker 0 000157] Execute()  stage Join.119
+[worker 0 000158] PushData() stage Join.119 with targets [Size.122]
+[worker 0 000159] Execute()  stage Size.122
+step 12, time: 184.444, update: 5
+[worker 0 000160] PushData() stage Join.119 with targets [Union.123 [ReduceByKey.124]]
+[worker 0 000161] PushData() stage ReduceByKey.115 with targets [Union.123 [ReduceByKey.124]]
+[worker 0 000162] Execute()  stage ReduceByKey.124
+[worker 0 000163] PushData() stage ReduceByKey.124 with targets [Join.125 Join.128]
+[worker 0 000164] PushData() stage Cache.5 with targets [Join.125]
+[worker 0 000165] Execute()  stage Join.125
+[worker 0 000166] PushData() stage Join.125 with targets [ReduceByKey.127]
+[worker 0 000167] Execute()  stage ReduceByKey.127
+[worker 0 000168] PushData() stage ReduceByKey.127 with targets [Join.128]
+[worker 0 000169] Execute()  stage Join.128
+[worker 0 000170] PushData() stage Join.128 with targets [Size.131]
+[worker 0 000171] Execute()  stage Size.131
+step 13, time: 197.179, update: 3
+[worker 0 000172] PushData() stage Join.128 with targets [Union.132 [ReduceByKey.133]]
+[worker 0 000173] PushData() stage ReduceByKey.124 with targets [Union.132 [ReduceByKey.133]]
+[worker 0 000174] Execute()  stage ReduceByKey.133
+[worker 0 000175] PushData() stage ReduceByKey.133 with targets [Join.134 Join.137]
+[worker 0 000176] PushData() stage Cache.5 with targets [Join.134]
+[worker 0 000177] Execute()  stage Join.134
+[worker 0 000178] PushData() stage Join.134 with targets [ReduceByKey.136]
+[worker 0 000179] Execute()  stage ReduceByKey.136
+[worker 0 000180] PushData() stage ReduceByKey.136 with targets [Join.137]
+[worker 0 000181] Execute()  stage Join.137
+[worker 0 000182] PushData() stage Join.137 with targets [Size.140]
+[worker 0 000183] Execute()  stage Size.140
+step 14, time: 209.752, update: 1
+[worker 0 000184] PushData() stage Join.137 with targets [Union.141 [ReduceByKey.142]]
+[worker 0 000185] PushData() stage ReduceByKey.133 with targets [Union.141 [ReduceByKey.142]]
+[worker 0 000186] Execute()  stage ReduceByKey.142
+[worker 0 000187] PushData() stage ReduceByKey.142 with targets [Join.143 Join.146]
+[worker 0 000188] PushData() stage Cache.5 with targets [Join.143]
+[worker 0 000189] Execute()  stage Join.143
+[worker 0 000190] PushData() stage Join.143 with targets [ReduceByKey.145]
+[worker 0 000191] Execute()  stage ReduceByKey.145
+[worker 0 000192] PushData() stage ReduceByKey.145 with targets [Join.146]
+[worker 0 000193] Execute()  stage Join.146
+[worker 0 000194] PushData() stage Join.146 with targets [Size.149]
+[worker 0 000195] Execute()  stage Size.149
+step 15, time: 222.458, update: 0
+[worker 0 000196] PushData() stage Join.146 with targets [Union.150 [ReduceByKey.151]]
+[worker 0 000197] PushData() stage ReduceByKey.142 with targets [Union.150 [ReduceByKey.151]]
+[worker 0 000198] Execute()  stage ReduceByKey.151
+time= 222.67
+[worker 0 000199] Manager::Traffic() tx/rx asymmetry = 1344
+Done. Result 0

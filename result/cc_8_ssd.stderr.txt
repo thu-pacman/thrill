@@ -1,0 +1,26 @@
+Thrill: using 251.805 GiB RAM total, BlockPool=83.935 GiB, workers=2.998 GiB, floating=83.935 GiB.
+Thrill: running in tcp network with 8 hosts and 28 workers per host with bic01 as rank 0 and endpoints bic01:36535 bic02:36536 bic03:36537 bic04:36538 bic05:36539 bic07:36540 bic08:36541 bic09:36542
+Thrill: using 251.805 GiB RAM total, BlockPool=83.935 GiB, workers=2.998 GiB, floating=83.935 GiB.
+Thrill: running in tcp network with 8 hosts and 28 workers per host with bic03 as rank 2 and endpoints bic01:36535 bic02:36536 bic03:36537 bic04:36538 bic05:36539 bic07:36540 bic08:36541 bic09:36542
+Thrill: using 251.805 GiB RAM total, BlockPool=83.935 GiB, workers=2.998 GiB, floating=83.935 GiB.
+Thrill: running in tcp network with 8 hosts and 28 workers per host with bic05 as rank 4 and endpoints bic01:36535 bic02:36536 bic03:36537 bic04:36538 bic05:36539 bic07:36540 bic08:36541 bic09:36542
+Thrill: using 251.805 GiB RAM total, BlockPool=83.935 GiB, workers=2.998 GiB, floating=83.935 GiB.
+Thrill: running in tcp network with 8 hosts and 28 workers per host with bic02 as rank 1 and endpoints bic01:36535 bic02:36536 bic03:36537 bic04:36538 bic05:36539 bic07:36540 bic08:36541 bic09:36542
+Thrill: using 251.805 GiB RAM total, BlockPool=83.935 GiB, workers=2.998 GiB, floating=83.935 GiB.
+Thrill: running in tcp network with 8 hosts and 28 workers per host with bic04 as rank 3 and endpoints bic01:36535 bic02:36536 bic03:36537 bic04:36538 bic05:36539 bic07:36540 bic08:36541 bic09:36542
+Thrill: using 251.680 GiB RAM total, BlockPool=83.893 GiB, workers=2.996 GiB, floating=83.893 GiB.
+Thrill: running in tcp network with 8 hosts and 28 workers per host with bic08 as rank 6 and endpoints bic01:36535 bic02:36536 bic03:36537 bic04:36538 bic05:36539 bic07:36540 bic08:36541 bic09:36542
+Thrill: using 251.805 GiB RAM total, BlockPool=83.935 GiB, workers=2.998 GiB, floating=83.935 GiB.
+Thrill: running in tcp network with 8 hosts and 28 workers per host with bic07 as rank 5 and endpoints bic01:36535 bic02:36536 bic03:36537 bic04:36538 bic05:36539 bic07:36540 bic08:36541 bic09:36542
+Thrill: using 251.680 GiB RAM total, BlockPool=83.893 GiB, workers=2.996 GiB, floating=83.893 GiB.
+Thrill: running in tcp network with 8 hosts and 28 workers per host with bic09 as rank 7 and endpoints bic01:36535 bic02:36536 bic03:36537 bic04:36538 bic05:36539 bic07:36540 bic08:36541 bic09:36542
+Thrill: no THRILL_LOG was found, so no json log is written.
+malloc_tracker ### exiting, total: 302755554424, peak: 92693014904, current: 61425216 / 819200, allocs: 779625292, unfreed: 136351
+malloc_tracker ### exiting, total: 301248524000, peak: 92740940752, current: 61613304 / 819200, allocs: 778459993, unfreed: 157687
+malloc_tracker ### exiting, total: 298506235032, peak: 92189649752, current: 60841320 / 819200, allocs: 764238291, unfreed: 176599
+malloc_tracker ### exiting, total: 301737069104, peak: 92822577128, current: 61899640 / 819200, allocs: 779407017, unfreed: 156446
+Thrill: ran 226.729s with max 56.708 GiB in DIA Blocks, 365.175 GiB network traffic, 0.000 B disk I/O, and 0.000 B max disk use.
+malloc_tracker ### exiting, total: 297260393352, peak: 92589800448, current: 61223992 / 819200, allocs: 761203301, unfreed: 152710
+malloc_tracker ### exiting, total: 296371251064, peak: 92372395512, current: 61590984 / 819200, allocs: 751031288, unfreed: 150762
+malloc_tracker ### exiting, total: 307040605408, peak: 92765131872, current: 61106304 / 819200, allocs: 771286747, unfreed: 179813
+malloc_tracker ### exiting, total: 323659646920, peak: 92342527208, current: 61265832 / 819200, allocs: 780451754, unfreed: 145607

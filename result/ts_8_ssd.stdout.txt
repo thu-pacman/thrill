@@ -1,0 +1,98 @@
+Hosts: bic01 bic02 bic03 bic04 bic05 bic07 bic08 bic09
+Command: /home/ybw/Reproduce/thrill/original-build/examples/terasort/terasort
+Connecting to ybw@bic01 to invoke /home/ybw/Reproduce/thrill/original-build/examples/terasort/terasort
+Connecting to ybw@bic02 to invoke /home/ybw/Reproduce/thrill/original-build/examples/terasort/terasort
+Connecting to ybw@bic03 to invoke /home/ybw/Reproduce/thrill/original-build/examples/terasort/terasort
+Connecting to ybw@bic04 to invoke /home/ybw/Reproduce/thrill/original-build/examples/terasort/terasort
+Connecting to ybw@bic05 to invoke /home/ybw/Reproduce/thrill/original-build/examples/terasort/terasort
+Connecting to ybw@bic07 to invoke /home/ybw/Reproduce/thrill/original-build/examples/terasort/terasort
+Connecting to ybw@bic08 to invoke /home/ybw/Reproduce/thrill/original-build/examples/terasort/terasort
+Connecting to ybw@bic09 to invoke /home/ybw/Reproduce/thrill/original-build/examples/terasort/terasort
+Waiting for execution to finish.
+Parameters:
+  input                (string list)       ["hdfs://bic07/user/ybw/ssd/Dataset/terasort-250G","true"]
+Options:
+  -s, --signed_char    (bool)              true
+  -g, --generate       (bool)              false
+  -G, --generate-only  (bool)              false
+  -o, --output         (string)            "hdfs://bic07/user/ybw/ssd/output/terasort/result"
+Parameters:
+  input                (string list)       ["hdfs://bic07/user/ybw/ssd/Dataset/terasort-250G","true"]
+Options:
+  -s, --signed_char    (bool)              true
+  -g, --generate       (bool)              false
+  -G, --generate-only  (bool)              false
+  -o, --output         (string)            "hdfs://bic07/user/ybw/ssd/output/terasort/result"
+Parameters:
+  input                (string list)       ["hdfs://bic07/user/ybw/ssd/Dataset/terasort-250G","true"]
+Options:
+  -s, --signed_char    (bool)              true
+  -g, --generate       (bool)              false
+  -G, --generate-only  (bool)              false
+  -o, --output         (string)            "hdfs://bic07/user/ybw/ssd/output/terasort/result"
+Parameters:
+  input                (string list)       ["hdfs://bic07/user/ybw/ssd/Dataset/terasort-250G","true"]
+Options:
+  -s, --signed_char    (bool)              true
+  -g, --generate       (bool)              false
+  -G, --generate-only  (bool)              false
+  -o, --output         (string)            "hdfs://bic07/user/ybw/ssd/output/terasort/result"
+Parameters:
+  input                (string list)       ["hdfs://bic07/user/ybw/ssd/Dataset/terasort-250G","true"]
+Options:
+  -s, --signed_char    (bool)              true
+  -g, --generate       (bool)              false
+  -G, --generate-only  (bool)              false
+  -o, --output         (string)            "hdfs://bic07/user/ybw/ssd/output/terasort/result"
+Parameters:
+  input                (string list)       ["hdfs://bic07/user/ybw/ssd/Dataset/terasort-250G","true"]
+Options:
+  -s, --signed_char    (bool)              true
+  -g, --generate       (bool)              false
+  -G, --generate-only  (bool)              false
+  -o, --output         (string)            "hdfs://bic07/user/ybw/ssd/output/terasort/result"
+Parameters:
+  input                (string list)       ["hdfs://bic07/user/ybw/ssd/Dataset/terasort-250G","true"]
+Options:
+  -s, --signed_char    (bool)              true
+  -g, --generate       (bool)              false
+  -G, --generate-only  (bool)              false
+  -o, --output         (string)            "hdfs://bic07/user/ybw/ssd/output/terasort/result"
+Parameters:
+  input                (string list)       ["hdfs://bic07/user/ybw/ssd/Dataset/terasort-250G","true"]
+Options:
+  -s, --signed_char    (bool)              true
+  -g, --generate       (bool)              false
+  -G, --generate-only  (bool)              false
+  -o, --output         (string)            "hdfs://bic07/user/ybw/ssd/output/terasort/result"
+[main 000000] FOXXLL v1.4.99 (prerelease/Release) (git a4a8aeee64743f845c5851e8b089965ea1c219d7)
+[main 000001] foxxll: Using default disk configuration.
+[main 000002] foxxll: Disk '/var/tmp/thrill.143638.tmp' is allocated, space: 1000 MiB, I/O implementation: syscall queue=0 devid=0 unlink_on_open
+[main 000000] FOXXLL v1.4.99 (prerelease/Release) (git a4a8aeee64743f845c5851e8b089965ea1c219d7)
+[main 000001] foxxll: Using default disk configuration.
+[main 000002] foxxll: Disk '/var/tmp/thrill.158988.tmp' is allocated, space: 1000 MiB, I/O implementation: syscall queue=0 devid=0 unlink_on_open
+[main 000000] FOXXLL v1.4.99 (prerelease/Release) (git a4a8aeee64743f845c5851e8b089965ea1c219d7)
+[main 000001] foxxll: Using default disk configuration.
+[main 000002] foxxll: Disk '/var/tmp/thrill.40904.tmp' is allocated, space: 1000 MiB, I/O implementation: syscall queue=0 devid=0 unlink_on_open
+[main 000000] FOXXLL v1.4.99 (prerelease/Release) (git a4a8aeee64743f845c5851e8b089965ea1c219d7)
+[main 000001] foxxll: Using default disk configuration.
+[main 000002] foxxll: Disk '/var/tmp/thrill.91579.tmp' is allocated, space: 1000 MiB, I/O implementation: syscall queue=0 devid=0 unlink_on_open
+[main 000000] FOXXLL v1.4.99 (prerelease/Release) (git a4a8aeee64743f845c5851e8b089965ea1c219d7)
+[main 000001] foxxll: Using default disk configuration.
+[main 000000] FOXXLL v1.4.99 (prerelease/Release) (git a4a8aeee64743f845c5851e8b089965ea1c219d7)
+[main 000001] foxxll: Using default disk configuration.
+[main 000002] foxxll: Disk '/var/tmp/thrill.133491.tmp' is allocated, space: 1000 MiB, I/O implementation: syscall queue=0 devid=0 unlink_on_open
+[main 000002] foxxll: Disk '/var/tmp/thrill.26928.tmp' is allocated, space: 1000 MiB, I/O implementation: syscall queue=0 devid=0 unlink_on_open
+[main 000000] FOXXLL v1.4.99 (prerelease/Release) (git a4a8aeee64743f845c5851e8b089965ea1c219d7)
+[main 000000] FOXXLL v1.4.99 (prerelease/Release) (git a4a8aeee64743f845c5851e8b089965ea1c219d7)
+[main 000001] foxxll: Using default disk configuration.
+[main 000001] foxxll: Using default disk configuration.
+[main 000002] foxxll: Disk '/var/tmp/thrill.72793.tmp' is allocated, space: 1000 MiB, I/O implementation: syscall queue=0 devid=0 unlink_on_open
+[main 000002] foxxll: Disk '/var/tmp/thrill.88996.tmp' is allocated, space: 1000 MiB, I/O implementation: syscall queue=0 devid=0 unlink_on_open
+[worker 0 000000] Execute()  stage ReadBinary.1
+[worker 0 000001] PushData() stage ReadBinary.1 with targets [Sort.2]
+[worker 0 000002] Execute()  stage Sort.2
+[worker 0 000003] PushData() stage Sort.2 with targets [WriteBinary.3]
+[worker 0 000004] Execute()  stage WriteBinary.3
+RESULT benchmark=terasort time=258.418 traffic=54748303712 hosts=8[worker 0 000005] Manager::Traffic() tx/rx asymmetry = 1344
+Done. Result 0

@@ -1,0 +1,90 @@
+Hosts: bic01 bic02 bic03 bic04 bic05 bic07 bic08 bic09
+Command: /home/ybw/Reproduce/thrill/original-build/examples/word_count/word_count_run_end
+Connecting to ybw@bic01 to invoke /home/ybw/Reproduce/thrill/original-build/examples/word_count/word_count_run_end
+Connecting to ybw@bic02 to invoke /home/ybw/Reproduce/thrill/original-build/examples/word_count/word_count_run_end
+Connecting to ybw@bic03 to invoke /home/ybw/Reproduce/thrill/original-build/examples/word_count/word_count_run_end
+Connecting to ybw@bic04 to invoke /home/ybw/Reproduce/thrill/original-build/examples/word_count/word_count_run_end
+Connecting to ybw@bic05 to invoke /home/ybw/Reproduce/thrill/original-build/examples/word_count/word_count_run_end
+Connecting to ybw@bic07 to invoke /home/ybw/Reproduce/thrill/original-build/examples/word_count/word_count_run_end
+Connecting to ybw@bic08 to invoke /home/ybw/Reproduce/thrill/original-build/examples/word_count/word_count_run_end
+Connecting to ybw@bic09 to invoke /home/ybw/Reproduce/thrill/original-build/examples/word_count/word_count_run_end
+Waiting for execution to finish.
+Parameters:
+  input             (string list)       ["hdfs://bic07/user/ybw/ssd/Dataset/deepmind-gutenberg.text"]
+Options:
+  -o, --output      (string)            "hdfs://bic07/user/ybw/ssd/output/wordcount/result"
+  -g, --generate    (bool)              false
+  -H, --hash_words  (bool)              false
+Parameters:
+  input             (string list)       ["hdfs://bic07/user/ybw/ssd/Dataset/deepmind-gutenberg.text"]
+Options:
+  -o, --output      (string)            "hdfs://bic07/user/ybw/ssd/output/wordcount/result"
+  -g, --generate    (bool)              false
+  -H, --hash_words  (bool)              false
+Parameters:
+  input             (string list)       ["hdfs://bic07/user/ybw/ssd/Dataset/deepmind-gutenberg.text"]
+Options:
+  -o, --output      (string)            "hdfs://bic07/user/ybw/ssd/output/wordcount/result"
+  -g, --generate    (bool)              false
+  -H, --hash_words  (bool)              false
+Parameters:
+  input             (string list)       ["hdfs://bic07/user/ybw/ssd/Dataset/deepmind-gutenberg.text"]
+Options:
+  -o, --output      (string)            "hdfs://bic07/user/ybw/ssd/output/wordcount/result"
+  -g, --generate    (bool)              false
+  -H, --hash_words  (bool)              false
+Parameters:
+  input             (string list)       ["hdfs://bic07/user/ybw/ssd/Dataset/deepmind-gutenberg.text"]
+Options:
+  -o, --output      (string)            "hdfs://bic07/user/ybw/ssd/output/wordcount/result"
+  -g, --generate    (bool)              false
+  -H, --hash_words  (bool)              false
+Parameters:
+  input             (string list)       ["hdfs://bic07/user/ybw/ssd/Dataset/deepmind-gutenberg.text"]
+Options:
+  -o, --output      (string)            "hdfs://bic07/user/ybw/ssd/output/wordcount/result"
+  -g, --generate    (bool)              false
+  -H, --hash_words  (bool)              false
+Parameters:
+  input             (string list)       ["hdfs://bic07/user/ybw/ssd/Dataset/deepmind-gutenberg.text"]
+Options:
+  -o, --output      (string)            "hdfs://bic07/user/ybw/ssd/output/wordcount/result"
+  -g, --generate    (bool)              false
+  -H, --hash_words  (bool)              false
+Parameters:
+  input             (string list)       ["hdfs://bic07/user/ybw/ssd/Dataset/deepmind-gutenberg.text"]
+Options:
+  -o, --output      (string)            "hdfs://bic07/user/ybw/ssd/output/wordcount/result"
+  -g, --generate    (bool)              false
+  -H, --hash_words  (bool)              false
+[main 000000] FOXXLL v1.4.99 (prerelease/Release) (git a4a8aeee64743f845c5851e8b089965ea1c219d7)
+[main 000001] foxxll: Using default disk configuration.
+[main 000002] foxxll: Disk '/var/tmp/thrill.158635.tmp' is allocated, space: 1000 MiB, I/O implementation: syscall queue=0 devid=0 unlink_on_open
+[main 000000] FOXXLL v1.4.99 (prerelease/Release) (git a4a8aeee64743f845c5851e8b089965ea1c219d7)
+[main 000001] foxxll: Using default disk configuration.
+[main 000002] foxxll: Disk '/var/tmp/thrill.72296.tmp' is allocated, space: 1000 MiB, I/O implementation: syscall queue=0 devid=0 unlink_on_open
+[main 000000] FOXXLL v1.4.99 (prerelease/Release) (git a4a8aeee64743f845c5851e8b089965ea1c219d7)
+[main 000001] foxxll: Using default disk configuration.
+[main 000002] foxxll: Disk '/var/tmp/thrill.143252.tmp' is allocated, space: 1000 MiB, I/O implementation: syscall queue=0 devid=0 unlink_on_open
+[main 000000] FOXXLL v1.4.99 (prerelease/Release) (git a4a8aeee64743f845c5851e8b089965ea1c219d7)
+[main 000001] foxxll: Using default disk configuration.
+[main 000002] foxxll: Disk '/var/tmp/thrill.40487.tmp' is allocated, space: 1000 MiB, I/O implementation: syscall queue=0 devid=0 unlink_on_open
+[main 000000] FOXXLL v1.4.99 (prerelease/Release) (git a4a8aeee64743f845c5851e8b089965ea1c219d7)
+[main 000001] foxxll: Using default disk configuration.
+[main 000002] foxxll: Disk '/var/tmp/thrill.133071.tmp' is allocated, space: 1000 MiB, I/O implementation: syscall queue=0 devid=0 unlink_on_open
+[main 000000] FOXXLL v1.4.99 (prerelease/Release) (git a4a8aeee64743f845c5851e8b089965ea1c219d7)
+[main 000000] FOXXLL v1.4.99 (prerelease/Release) (git a4a8aeee64743f845c5851e8b089965ea1c219d7)
+[main 000001] foxxll: Using default disk configuration.
+[main 000001] foxxll: Using default disk configuration.
+[main 000000] FOXXLL v1.4.99 (prerelease/Release) (git a4a8aeee64743f845c5851e8b089965ea1c219d7)
+[main 000001] foxxll: Using default disk configuration.
+[main 000002] foxxll: Disk '/var/tmp/thrill.91211.tmp' is allocated, space: 1000 MiB, I/O implementation: syscall queue=0 devid=0 unlink_on_open
+[main 000002] foxxll: Disk '/var/tmp/thrill.26519.tmp' is allocated, space: 1000 MiB, I/O implementation: syscall queue=0 devid=0 unlink_on_open
+[main 000002] foxxll: Disk '/var/tmp/thrill.88550.tmp' is allocated, space: 1000 MiB, I/O implementation: syscall queue=0 devid=0 unlink_on_open
+[worker 0 000000] Execute()  stage ReadLines.1
+[worker 0 000001] PushData() stage ReadLines.1 with targets [ReduceByKey.5]
+[worker 0 000002] Execute()  stage ReduceByKey.5
+[worker 0 000003] PushData() stage ReduceByKey.5 with targets [WriteLines.7]
+[worker 0 000004] Execute()  stage WriteLines.7
+RESULT benchmark=wordcount files=1 time=12.0458 traffic=1205809437 hosts=8[worker 0 000005] Manager::Traffic() tx/rx asymmetry = 1344
+Done. Result 0

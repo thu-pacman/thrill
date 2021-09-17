@@ -1,0 +1,192 @@
+Hosts: bic01 bic02 bic03 bic04 bic05 bic07 bic08 bic09
+Command: /home/ybw/Reproduce/thrill/original-build/examples/page_rank/page_rank_run_end
+Connecting to ybw@bic01 to invoke /home/ybw/Reproduce/thrill/original-build/examples/page_rank/page_rank_run_end
+Connecting to ybw@bic02 to invoke /home/ybw/Reproduce/thrill/original-build/examples/page_rank/page_rank_run_end
+Connecting to ybw@bic03 to invoke /home/ybw/Reproduce/thrill/original-build/examples/page_rank/page_rank_run_end
+Connecting to ybw@bic04 to invoke /home/ybw/Reproduce/thrill/original-build/examples/page_rank/page_rank_run_end
+Connecting to ybw@bic05 to invoke /home/ybw/Reproduce/thrill/original-build/examples/page_rank/page_rank_run_end
+Connecting to ybw@bic07 to invoke /home/ybw/Reproduce/thrill/original-build/examples/page_rank/page_rank_run_end
+Connecting to ybw@bic08 to invoke /home/ybw/Reproduce/thrill/original-build/examples/page_rank/page_rank_run_end
+Connecting to ybw@bic09 to invoke /home/ybw/Reproduce/thrill/original-build/examples/page_rank/page_rank_run_end
+Waiting for execution to finish.
+Parameters:
+  input                (string list)       ["hdfs://bic07/user/ybw/ssd/Dataset/twitter-2010.text","true"]
+Options:
+  -g, --generate       (bool)              false
+  -j, --join           (bool)              true
+      --size_mean      (double)            50
+      --size_var       (double)            10
+      --link_scale     (double)            0.3
+      --link_exponent  (double)            0.5
+  -o, --output         (string)            "hdfs://bic07/user/ybw/ssd/output/thrill_pagerank/result"
+  -n, --iterations     (size_t)            10
+Parameters:
+  input                (string list)       ["hdfs://bic07/user/ybw/ssd/Dataset/twitter-2010.text","true"]
+Options:
+  -g, --generate       (bool)              false
+  -j, --join           (bool)              true
+      --size_mean      (double)            50
+      --size_var       (double)            10
+      --link_scale     (double)            0.3
+      --link_exponent  (double)            0.5
+  -o, --output         (string)            "hdfs://bic07/user/ybw/ssd/output/thrill_pagerank/result"
+  -n, --iterations     (size_t)            10
+Parameters:
+  input                (string list)       ["hdfs://bic07/user/ybw/ssd/Dataset/twitter-2010.text","true"]
+Options:
+  -g, --generate       (bool)              false
+  -j, --join           (bool)              true
+      --size_mean      (double)            50
+      --size_var       (double)            10
+      --link_scale     (double)            0.3
+      --link_exponent  (double)            0.5
+  -o, --output         (string)            "hdfs://bic07/user/ybw/ssd/output/thrill_pagerank/result"
+  -n, --iterations     (size_t)            10
+Parameters:
+  input                (string list)       ["hdfs://bic07/user/ybw/ssd/Dataset/twitter-2010.text","true"]
+Options:
+  -g, --generate       (bool)              false
+  -j, --join           (bool)              true
+      --size_mean      (double)            50
+      --size_var       (double)            10
+      --link_scale     (double)            0.3
+      --link_exponent  (double)            0.5
+  -o, --output         (string)            "hdfs://bic07/user/ybw/ssd/output/thrill_pagerank/result"
+  -n, --iterations     (size_t)            10
+Parameters:
+  input                (string list)       ["hdfs://bic07/user/ybw/ssd/Dataset/twitter-2010.text","true"]
+Options:
+  -g, --generate       (bool)              false
+  -j, --join           (bool)              true
+      --size_mean      (double)            50
+      --size_var       (double)            10
+      --link_scale     (double)            0.3
+      --link_exponent  (double)            0.5
+  -o, --output         (string)            "hdfs://bic07/user/ybw/ssd/output/thrill_pagerank/result"
+  -n, --iterations     (size_t)            10
+Parameters:
+  input                (string list)       ["hdfs://bic07/user/ybw/ssd/Dataset/twitter-2010.text","true"]
+Options:
+  -g, --generate       (bool)              false
+  -j, --join           (bool)              true
+      --size_mean      (double)            50
+      --size_var       (double)            10
+      --link_scale     (double)            0.3
+      --link_exponent  (double)            0.5
+  -o, --output         (string)            "hdfs://bic07/user/ybw/ssd/output/thrill_pagerank/result"
+  -n, --iterations     (size_t)            10
+Parameters:
+  input                (string list)       ["hdfs://bic07/user/ybw/ssd/Dataset/twitter-2010.text","true"]
+Options:
+  -g, --generate       (bool)              false
+  -j, --join           (bool)              true
+      --size_mean      (double)            50
+      --size_var       (double)            10
+      --link_scale     (double)            0.3
+      --link_exponent  (double)            0.5
+  -o, --output         (string)            "hdfs://bic07/user/ybw/ssd/output/thrill_pagerank/result"
+  -n, --iterations     (size_t)            10
+Parameters:
+  input                (string list)       ["hdfs://bic07/user/ybw/ssd/Dataset/twitter-2010.text","true"]
+Options:
+  -g, --generate       (bool)              false
+  -j, --join           (bool)              true
+      --size_mean      (double)            50
+      --size_var       (double)            10
+      --link_scale     (double)            0.3
+      --link_exponent  (double)            0.5
+  -o, --output         (string)            "hdfs://bic07/user/ybw/ssd/output/thrill_pagerank/result"
+  -n, --iterations     (size_t)            10
+[main 000000] FOXXLL v1.4.99 (prerelease/Release) (git a4a8aeee64743f845c5851e8b089965ea1c219d7)
+[main 000001] foxxll: Using default disk configuration.
+[main 000002] foxxll: Disk '/var/tmp/thrill.139820.tmp' is allocated, space: 1000 MiB, I/O implementation: syscall queue=0 devid=0 unlink_on_open
+[main 000000] FOXXLL v1.4.99 (prerelease/Release) (git a4a8aeee64743f845c5851e8b089965ea1c219d7)
+[main 000001] foxxll: Using default disk configuration.
+[main 000002] foxxll: Disk '/var/tmp/thrill.36890.tmp' is allocated, space: 1000 MiB, I/O implementation: syscall queue=0 devid=0 unlink_on_open
+[main 000000] FOXXLL v1.4.99 (prerelease/Release) (git a4a8aeee64743f845c5851e8b089965ea1c219d7)
+[main 000001] foxxll: Using default disk configuration.
+[main 000002] foxxll: Disk '/var/tmp/thrill.87690.tmp' is allocated, space: 1000 MiB, I/O implementation: syscall queue=0 devid=0 unlink_on_open
+[main 000000] FOXXLL v1.4.99 (prerelease/Release) (git a4a8aeee64743f845c5851e8b089965ea1c219d7)
+[main 000001] foxxll: Using default disk configuration.
+[main 000002] foxxll: Disk '/var/tmp/thrill.85355.tmp' is allocated, space: 1000 MiB, I/O implementation: syscall queue=0 devid=0 unlink_on_open
+[main 000000] FOXXLL v1.4.99 (prerelease/Release) (git a4a8aeee64743f845c5851e8b089965ea1c219d7)
+[main 000001] foxxll: Using default disk configuration.
+[main 000002] foxxll: Disk '/var/tmp/thrill.155115.tmp' is allocated, space: 1000 MiB, I/O implementation: syscall queue=0 devid=0 unlink_on_open
+[main 000000] FOXXLL v1.4.99 (prerelease/Release) (git a4a8aeee64743f845c5851e8b089965ea1c219d7)
+[main 000001] foxxll: Using default disk configuration.
+[main 000002] foxxll: Disk '/var/tmp/thrill.68740.tmp' is allocated, space: 1000 MiB, I/O implementation: syscall queue=0 devid=0 unlink_on_open
+[main 000000] FOXXLL v1.4.99 (prerelease/Release) (git a4a8aeee64743f845c5851e8b089965ea1c219d7)
+[main 000001] foxxll: Using default disk configuration.
+[main 000000] FOXXLL v1.4.99 (prerelease/Release) (git a4a8aeee64743f845c5851e8b089965ea1c219d7)
+[main 000001] foxxll: Using default disk configuration.
+[main 000002] foxxll: Disk '/var/tmp/thrill.129773.tmp' is allocated, space: 1000 MiB, I/O implementation: syscall queue=0 devid=0 unlink_on_open
+[main 000002] foxxll: Disk '/var/tmp/thrill.22789.tmp' is allocated, space: 1000 MiB, I/O implementation: syscall queue=0 devid=0 unlink_on_open
+[worker 0 000000] Execute()  stage ReadLines.1
+[worker 0 000001] PushData() stage ReadLines.1 with targets [GroupByKey.3]
+[worker 0 000002] Execute()  stage GroupByKey.3
+[worker 0 000003] PushData() stage GroupByKey.3 with targets [Cache.4]
+[worker 0 000004] Execute()  stage Cache.4
+[worker 0 000005] PushData() stage Cache.4 with targets [Collapse.6 [Join.7] Join.7]
+[worker 0 000006] Collapse rejected File from parent due to non-empty function stack.
+[worker 0 000007] Execute()  stage Join.7
+[worker 0 000008] PushData() stage Join.7 with targets [ReducePair.9]
+[worker 0 000009] Execute()  stage ReducePair.9
+step 0, time: 18.5745 s
+[worker 0 000010] PushData() stage ReducePair.9 with targets [Collapse.11 [Join.12]]
+[worker 0 000011] PushData() stage Cache.4 with targets [Join.12]
+[worker 0 000012] Execute()  stage Join.12
+[worker 0 000013] PushData() stage Join.12 with targets [ReducePair.14]
+[worker 0 000014] Execute()  stage ReducePair.14
+step 1, time: 26.4007 s
+[worker 0 000015] PushData() stage ReducePair.14 with targets [Collapse.16 [Join.17]]
+[worker 0 000016] PushData() stage Cache.4 with targets [Join.17]
+[worker 0 000017] Execute()  stage Join.17
+[worker 0 000018] PushData() stage Join.17 with targets [ReducePair.19]
+[worker 0 000019] Execute()  stage ReducePair.19
+step 2, time: 34.6708 s
+[worker 0 000020] PushData() stage ReducePair.19 with targets [Collapse.21 [Join.22]]
+[worker 0 000021] PushData() stage Cache.4 with targets [Join.22]
+[worker 0 000022] Execute()  stage Join.22
+[worker 0 000023] PushData() stage Join.22 with targets [ReducePair.24]
+[worker 0 000024] Execute()  stage ReducePair.24
+step 3, time: 42.6936 s
+[worker 0 000025] PushData() stage ReducePair.24 with targets [Collapse.26 [Join.27]]
+[worker 0 000026] PushData() stage Cache.4 with targets [Join.27]
+[worker 0 000027] Execute()  stage Join.27
+[worker 0 000028] PushData() stage Join.27 with targets [ReducePair.29]
+[worker 0 000029] Execute()  stage ReducePair.29
+step 4, time: 50.78 s
+[worker 0 000030] PushData() stage ReducePair.29 with targets [Collapse.31 [Join.32]]
+[worker 0 000031] PushData() stage Cache.4 with targets [Join.32]
+[worker 0 000032] Execute()  stage Join.32
+[worker 0 000033] PushData() stage Join.32 with targets [ReducePair.34]
+[worker 0 000034] Execute()  stage ReducePair.34
+step 5, time: 59.2024 s
+[worker 0 000035] PushData() stage ReducePair.34 with targets [Collapse.36 [Join.37]]
+[worker 0 000036] PushData() stage Cache.4 with targets [Join.37]
+[worker 0 000037] Execute()  stage Join.37
+[worker 0 000038] PushData() stage Join.37 with targets [ReducePair.39]
+[worker 0 000039] Execute()  stage ReducePair.39
+step 6, time: 67.1924 s
+[worker 0 000040] PushData() stage ReducePair.39 with targets [Collapse.41 [Join.42]]
+[worker 0 000041] PushData() stage Cache.4 with targets [Join.42]
+[worker 0 000042] Execute()  stage Join.42
+[worker 0 000043] PushData() stage Join.42 with targets [ReducePair.44]
+[worker 0 000044] Execute()  stage ReducePair.44
+step 7, time: 74.9958 s
+[worker 0 000045] PushData() stage ReducePair.44 with targets [Collapse.46 [Join.47]]
+[worker 0 000046] PushData() stage Cache.4 with targets [Join.47]
+[worker 0 000047] Execute()  stage Join.47
+[worker 0 000048] PushData() stage Join.47 with targets [ReducePair.49]
+[worker 0 000049] Execute()  stage ReducePair.49
+step 8, time: 83.4852 s
+[worker 0 000050] PushData() stage ReducePair.49 with targets [Collapse.51 [Join.52]]
+[worker 0 000051] PushData() stage Cache.4 with targets [Join.52]
+[worker 0 000052] Execute()  stage Join.52
+[worker 0 000053] PushData() stage Join.52 with targets [ReducePair.54]
+[worker 0 000054] Execute()  stage ReducePair.54
+step 9, time: 91.4213 s
+[worker 0 000055] PushData() stage ReducePair.54 with targets [Collapse.56 [WriteLines.58]]
+[worker 0 000056] Execute()  stage WriteLines.58
+RESULT benchmark=pagerank_gen detection=ON iterations=10 time=93.0919 traffic= 41691985623 hosts=8[worker 0 000057] Manager::Traffic() tx/rx asymmetry = 1344
+Done. Result 0
