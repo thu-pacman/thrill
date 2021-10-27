@@ -418,10 +418,21 @@ if(THRILL_USE_JEMALLOC)
     message(STATUS "but consider installing it for systems with limited memory.")
   else()
     list(APPEND THRILL_DEFINITIONS "THRILL_HAVE_JEMALLOC=1")
-    set(THRILL_INCLUDE_DIRS ${JEMALLOC_INCLUDE_DIRS} ${THRILL_INCLUDE_DIRS})
+    #set(THRILL_INCLUDE_DIRS ${JEMALLOC_INCLUDE_DIRS} ${THRILL_INCLUDE_DIRS})
     set(THRILL_LINK_LIBRARIES ${JEMALLOC_LIBRARIES} ${THRILL_LINK_LIBRARIES})
   endif()
 endif()
+
+option(WITH_ASAN "build with ASAN" OFF)
+if (WITH_ASAN)
+    message(USE ADDRESS SANITIZER)
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=address")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address")
+    if (THRILL_USE_JEMALLOC)
+        message(FATAL "ASAN does not work well with JeMalloc")
+    endif ()
+endif ()
 
 # use ZLIB for transparent .gz compression/decompression
 
@@ -440,7 +451,7 @@ if(THRILL_USE_ZLIB)
   find_package(ZLIB REQUIRED)
 
   list(APPEND THRILL_DEFINITIONS "THRILL_HAVE_ZLIB=1")
-  set(THRILL_INCLUDE_DIRS ${ZLIB_INCLUDE_DIRS} ${THRILL_INCLUDE_DIRS})
+  #set(THRILL_INCLUDE_DIRS ${ZLIB_INCLUDE_DIRS} ${THRILL_INCLUDE_DIRS})
   set(THRILL_LINK_LIBRARIES ${ZLIB_LIBRARIES} ${THRILL_LINK_LIBRARIES})
 endif()
 
@@ -461,7 +472,7 @@ if(THRILL_USE_BZIP2)
   find_package(BZip2 REQUIRED)
 
   list(APPEND THRILL_DEFINITIONS "THRILL_HAVE_BZIP2=1")
-  set(THRILL_INCLUDE_DIRS ${BZIP2_INCLUDE_DIRS} ${THRILL_INCLUDE_DIRS})
+  #set(THRILL_INCLUDE_DIRS ${BZIP2_INCLUDE_DIRS} ${THRILL_INCLUDE_DIRS})
   set(THRILL_LINK_LIBRARIES ${BZIP2_LIBRARIES} ${THRILL_LINK_LIBRARIES})
 endif()
 
@@ -566,8 +577,8 @@ endif()
 
 find_package(Boost 1.42.0 COMPONENTS)
 if(Boost_FOUND)
-  set(THRILL_INCLUDE_DIRS ${Boost_INCLUDE_DIRS} ${THRILL_INCLUDE_DIRS})
-  set(THRILL_LINK_LIBRARIES ${Boost_LIBRARIES} ${THRILL_LINK_LIBRARIES})
+	#set(THRILL_INCLUDE_DIRS ${Boost_INCLUDE_DIRS} ${THRILL_INCLUDE_DIRS})
+	set(THRILL_LINK_LIBRARIES ${Boost_LIBRARIES} ${THRILL_LINK_LIBRARIES})
 endif()
 
 ################################################################################
