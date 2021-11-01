@@ -32,6 +32,8 @@
 #include <utility>
 #include <vector>
 
+#include "cache.h"
+
 namespace thrill {
 namespace data {
 
@@ -498,7 +500,7 @@ BlockPool::AllocateByteBlock(size_t size, size_t local_worker_id) {
     // allocate block memory. -- unlock mutex for that time, since it may
     // require block eviction.
     lock.unlock();
-    Byte* data = d_->aligned_alloc_.allocate(size);
+    Byte* data = (Byte*) cache_alloc(size);
     LOGC(debug_alloc)
         << "ByteBlock aligned_alloc: " << (void*)data << " size " << size;
     lock.lock();
@@ -673,7 +675,7 @@ PinRequestPtr BlockPool::PinBlock(const Block& block, size_t local_worker_id) {
     // allocate block memory.
     lock.unlock();
     Byte* data = read->byte_block()->data_ =
-        d_->aligned_alloc_.allocate(block_ptr->size());
+        (Byte*) cache_alloc(block_ptr->size());
     lock.lock();
 
     if (!block_ptr->ext_file_) {
@@ -748,7 +750,7 @@ void BlockPool::OnReadComplete(
         sLOGC(debug_alloc)
             << "ByteBlock  deallocate"
             << (void*)read->byte_block()->data_ << "size" << block_size;
-        d_->aligned_alloc_.deallocate(read->byte_block()->data_, block_size);
+        cache_free(read->byte_block()->data_, block_size);
 
         d_->IntReleaseInternalMemory(block_size);
 
@@ -1025,7 +1027,7 @@ void BlockPool::DestroyBlock(ByteBlock* block_ptr) {
         sLOGC(debug_alloc)
             << "ByteBlock deallocate"
             << (void*)block_ptr->data_ << "size" << block_ptr->size();
-        d_->aligned_alloc_.deallocate(block_ptr->data_, block_ptr->size());
+        cache_free(block_ptr->data_, block_ptr->size());
         block_ptr->data_ = nullptr;
 
         d_->IntReleaseInternalMemory(block_ptr->size());
@@ -1052,7 +1054,7 @@ void BlockPool::DestroyBlock(ByteBlock* block_ptr) {
         sLOGC(debug_alloc)
             << "ByteBlock deallocate"
             << (void*)block_ptr->data_ << "size" << block_ptr->size();
-        d_->aligned_alloc_.deallocate(block_ptr->data_, block_ptr->size());
+        cache_free(block_ptr->data_, block_ptr->size());
         block_ptr->data_ = nullptr;
 
         d_->IntReleaseInternalMemory(block_ptr->size());
@@ -1334,7 +1336,7 @@ void BlockPool::OnWriteComplete(
         sLOGC(debug_alloc)
             << "ByteBlock deallocate"
             << (void*)block_ptr->data_ << "size" << block_ptr->size();
-        d_->aligned_alloc_.deallocate(block_ptr->data_, block_ptr->size());
+        cache_free(block_ptr->data_, block_ptr->size());
         block_ptr->data_ = nullptr;
 
         d_->IntReleaseInternalMemory(block_ptr->size());
@@ -1403,3 +1405,4 @@ size_t BlockPool::next_file_id() {
 } // namespace thrill
 
 /******************************************************************************/
+
