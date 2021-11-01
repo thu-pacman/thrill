@@ -175,8 +175,11 @@ public:
 #endif
         int f = MSG_DONTWAIT;
         if (flags & MsgMore) f |= MSG_MORE;
-        ssize_t wb = socket_.send_one(data, size, f);
+        void* real_data = malloc(size);
+        memcpy(real_data, data, size);
+        ssize_t wb = socket_.send_one(real_data, size, f);
         if (wb > 0) tx_bytes_ += wb;
+        free(real_data);
         return wb;
     }
 
@@ -192,8 +195,13 @@ public:
         // MacOSX has no MSG_DONTWAIT
         SetNonBlocking(true);
 #endif
-        ssize_t rb = socket_.recv_one(out_data, size, MSG_DONTWAIT);
-        if (rb > 0) rx_bytes_ += rb;
+        void* real_data = malloc(size);
+        ssize_t rb = socket_.recv_one(real_data, size, MSG_DONTWAIT);
+        if (rb > 0) {
+          rx_bytes_ += rb;
+          memcpy(out_data, real_data, rb);
+        }
+        free(real_data);
         return rb;
     }
 
@@ -249,3 +257,4 @@ private:
 #endif // !THRILL_NET_TCP_CONNECTION_HEADER
 
 /******************************************************************************/
+
