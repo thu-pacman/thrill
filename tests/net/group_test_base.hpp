@@ -22,10 +22,82 @@
 #include <tuple>
 #include <vector>
 
+#include "cache.h"
+
 using namespace thrill;      // NOLINT
 
 //! do nothing but terminate, this check construction and destruction.
 static void TestNoOperation(net::Group*) { }
+
+////! send and receive a message from both neighbors.
+//static void TestCachedSendRecvCyclic(net::Group* net) {
+//  size_t msgSize = 1024*1024;
+//  uint64_t* buffer = (uint64_t*) cache_alloc(msgSize * sizeof(uint64_t));
+//  size_t id = net->my_host_rank();
+//  for (size_t i=0; i<msgSize; ++i) {
+//    buffer[i] = id;
+//  }
+//
+//  if (id != 0) {
+//    net->connection(id - 1).RecvOne(buffer, msgSize * sizeof(uint64_t));
+//    for (size_t i=0; i<msgSize; ++i) {
+//      printf("[%zu] Receive from %zu %lu %p\n", id, id-1, buffer[i], buffer);
+//      ASSERT_EQ(id - 1, buffer[i]);
+//    }
+//  }
+//
+//  if (id != net->num_hosts() - 1) {
+//    printf("[%zu] Send to %zu %lu\n", id, id+1, buffer[0]);
+//    net->connection(id + 1).SendOne(buffer, msgSize * sizeof(uint64_t));
+//  }
+//}
+
+
+//! send and receive a message from both neighbors.
+static void TestCachedSendRecvCyclicSync(net::Group* net) {
+  size_t msgSize = 1024*1024;
+  size_t id = net->my_host_rank();
+  uint64_t* sendBuf = (uint64_t*) cache_alloc(sizeof(uint64_t) * msgSize);
+  uint64_t* recvBuf = (uint64_t*) cache_alloc(sizeof(uint64_t) * msgSize);
+  for (size_t i=0; i<msgSize; ++i) {
+    sendBuf[i] = id;
+  }
+
+  if (id != 0) {
+    net->connection(id - 1).SyncRecv(recvBuf, msgSize * sizeof(uint64_t));
+    // net->ReceiveFrom<size_t>(id - 1, &res);
+    for (size_t i=0; i<msgSize; ++i) {
+      ASSERT_EQ(id - 1, recvBuf[i]);
+    }
+  }
+
+  if (id != net->num_hosts() - 1) {
+    net->connection(id + 1).SyncSend(sendBuf, msgSize * sizeof(uint64_t));
+  }
+}
+
+static void TestCachedSendRecvCyclicNonBlocking(net::Group* net) {
+  size_t msgSize = 1024*1024;
+  size_t id = net->my_host_rank();
+  uint64_t* sendBuf = (uint64_t*) cache_alloc(sizeof(uint64_t) * msgSize);
+  uint64_t* recvBuf = (uint64_t*) cache_alloc(sizeof(uint64_t) * msgSize);
+  for (size_t i=0; i<msgSize; ++i) {
+    sendBuf[i] = id;
+  }
+
+  if (id != 0) {
+    net->connection(id - 1).RecvOne(recvBuf, msgSize * sizeof(uint64_t));
+    // net->ReceiveFrom<size_t>(id - 1, &res);
+    for (size_t i=0; i<msgSize; ++i) {
+      ASSERT_EQ(id - 1, recvBuf[i]);
+    }
+  }
+
+  if (id != net->num_hosts() - 1) {
+    net->connection(id + 1).SendOne(sendBuf, msgSize * sizeof(uint64_t));
+  }
+}
+
 
 //! send and receive a message from both neighbors.
 static void TestSendRecvCyclic(net::Group* net) {
@@ -310,3 +382,4 @@ void DisabledTestDispatcherAsyncWriteAndReadIntoStdFuture(net::Group* net) {
 #endif // !THRILL_TESTS_NET_GROUP_TEST_BASE_HEADER
 
 /******************************************************************************/
+

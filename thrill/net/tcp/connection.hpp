@@ -25,6 +25,8 @@
 #include <cstring>
 #include <string>
 
+#include <cache.h>
+
 namespace thrill {
 namespace net {
 namespace tcp {
@@ -163,9 +165,12 @@ public:
         SetNonBlocking(false);
         int f = 0;
         if (flags & MsgMore) f |= MSG_MORE;
-        if (socket_.send(data, size, f) != static_cast<ssize_t>(size))
+        void* real_data = malloc(size);
+        cache_memcpy(real_data, data, size);
+        if (socket_.send(real_data, size, f) != static_cast<ssize_t>(size))
             throw Exception("Error during SyncSend", errno);
         tx_bytes_ += size;
+        free(real_data);
     }
 
     ssize_t SendOne(const void* data, size_t size, Flags flags) final {
@@ -176,7 +181,7 @@ public:
         int f = MSG_DONTWAIT;
         if (flags & MsgMore) f |= MSG_MORE;
         void* real_data = malloc(size);
-        memcpy(real_data, data, size);
+        cache_memcpy(real_data, data, size);
         ssize_t wb = socket_.send_one(real_data, size, f);
         if (wb > 0) tx_bytes_ += wb;
         free(real_data);
@@ -185,9 +190,12 @@ public:
 
     void SyncRecv(void* out_data, size_t size) final {
         SetNonBlocking(false);
-        if (socket_.recv(out_data, size) != static_cast<ssize_t>(size))
+        void* real_data = malloc(size);
+        if (socket_.recv(real_data, size) != static_cast<ssize_t>(size))
             throw Exception("Error during SyncRecv", errno);
         rx_bytes_ += size;
+        cache_memcpy(out_data, real_data, size);
+        free(real_data);
     }
 
     ssize_t RecvOne(void* out_data, size_t size) final {
@@ -199,7 +207,7 @@ public:
         ssize_t rb = socket_.recv_one(real_data, size, MSG_DONTWAIT);
         if (rb > 0) {
           rx_bytes_ += rb;
-          memcpy(out_data, real_data, rb);
+          cache_memcpy(out_data, real_data, rb);
         }
         free(real_data);
         return rb;

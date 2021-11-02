@@ -53,6 +53,12 @@ TEST(RealTcpGroup, NoOperation) {
 TEST(RealTcpGroup, SendRecvCyclic) {
     RealGroupTest(TestSendRecvCyclic);
 }
+TEST(RealTcpGroup, TestCachedSendRecvCyclicSync) {
+  RealGroupTest(TestCachedSendRecvCyclicSync);
+}
+TEST(RealTcpGroup, TestCachedSendRecvCyclicNonBlocking) {
+  RealGroupTest(TestCachedSendRecvCyclicNonBlocking);
+}
 TEST(RealTcpGroup, BroadcastIntegral) {
     RealGroupTest(TestBroadcastIntegral);
 }
