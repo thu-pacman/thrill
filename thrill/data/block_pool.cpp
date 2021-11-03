@@ -10,6 +10,7 @@
 
 #include <thrill/common/logger.hpp>
 #include <thrill/common/math.hpp>
+#include <thrill/common/lowlevel_cache.h>
 #include <thrill/data/block.hpp>
 #include <thrill/data/block_pool.hpp>
 #include <thrill/mem/aligned_allocator.hpp>
