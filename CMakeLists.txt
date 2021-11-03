@@ -434,6 +434,17 @@ if (WITH_ASAN)
     endif ()
 endif ()
 
+option(WITH_TSAN "build with TSAN" OFF)
+if (WITH_TSAN)
+	message(USE THREAD SANITIZER)
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=thread")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=thread")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=thread")
+    if (THRILL_USE_JEMALLOC)
+        message(FATAL "TSAN does not work well with JeMalloc")
+    endif ()
+endif ()
+
 # use ZLIB for transparent .gz compression/decompression
 
 if(THRILL_USE_ZLIB STREQUAL "AUTO")
