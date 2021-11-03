@@ -22,7 +22,8 @@ namespace thrill {
 namespace data {
 
 size_t start_block_size = 4 * 1024;
-size_t default_block_size = 2 * 1024 * 1024;
+// size_t default_block_size = 2 * 1024 * 1024;
+size_t default_block_size = 4 * 1024;
 
 size_t File::default_prefetch_size_ = 2 * default_block_size;
 
