@@ -12,6 +12,7 @@
 #ifndef THRILL_DATA_BYTE_BLOCK_HEADER
 #define THRILL_DATA_BYTE_BLOCK_HEADER
 
+#include <thrill/common/lowlevel_cache.h>
 #include <thrill/mem/pool.hpp>
 
 #include <foxxll/io/file.hpp>
@@ -84,11 +85,16 @@ public:
     size_t size() const { return size_; }
 
     //! Returns whether the ByteBlock is in an external file.
-    bool has_ext_file() const { return ext_file_.get() != nullptr; }
+    bool has_ext_file() const { return false; }
 
     //! return current pin count
     size_t pin_count(size_t local_worker_id) const {
-        return pin_count_[local_worker_id];
+        // return cache_pin_count(page_id_);
+        return 0;
+    }
+    size_t total_pins() const {
+        // return cache_pin_count(page_id_);
+        return 0;
     }
 
     //! return string list of pin_counts
@@ -109,6 +115,8 @@ public:
 
     //! decrement pin count, possibly signal block pool that if it reaches zero.
     void DecPinCount(size_t local_worker_id);
+
+    void SetData(Byte* data) { data_ = data; }
 
 private:
     //! the memory block itself is referenced as it is in a a separate memory
@@ -135,6 +143,7 @@ private:
     //! shared pointer to external file, if this is != nullptr then the Block
     //! was created for directly reading binary files.
     foxxll::file_ptr ext_file_;
+    size_t page_id_;
 
     // BlockPool is a friend to call ctor and to manipulate data_.
     friend class BlockPool;
@@ -159,8 +168,7 @@ private:
 
     //! Constructor to initialize ByteBlock as a mapping to an external
     //! foxxll::file area.
-    ByteBlock(BlockPool* block_pool, const foxxll::file_ptr& ext_file,
-              int64_t offset, size_t size);
+    ByteBlock(BlockPool* block_pool, size_t page_id, size_t size);
 
     friend std::ostream& operator << (std::ostream& os, const ByteBlock& b);
 

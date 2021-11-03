@@ -34,19 +34,17 @@ ByteBlock::ByteBlock(BlockPool* block_pool, Byte* data, size_t size)
 { }
 
 ByteBlock::ByteBlock(
-    BlockPool* block_pool, const foxxll::file_ptr& ext_file,
-    int64_t offset, size_t size)
+    BlockPool* block_pool, size_t page_id, size_t size)
     : data_(nullptr), size_(size),
       block_pool_(block_pool),
       pin_count_(block_pool_->workers_per_host()),
-      em_bid_(ext_file.get(), offset, size),
-      ext_file_(ext_file)
+      page_id_(page_id)
 { }
 
 void ByteBlock::Deleter::operator () (ByteBlock* bb) const {
     sLOG << "ByteBlock[" << bb << "]::deleter()"
          << "pin_count_" << bb->pin_count_str();
-    assert(bb->total_pins_ == 0);
+    assert(bb->total_pins() == 0);
     assert(bb->reference_count() == 0);
 
     // call BlockPool's DestroyBlock() to de-register ByteBlock and free data
@@ -83,7 +81,7 @@ std::ostream& operator << (std::ostream& os, const ByteBlock& b) {
        << " size_=" << b.size_
        << " block_pool_=" << b.block_pool_
        << " total_pins_=" << b.total_pins_
-       << " ext_file_=" << b.ext_file_;
+       << " page_id_=" << b.page_id_;
     return os << "]";
 }
 

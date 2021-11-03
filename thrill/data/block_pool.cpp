@@ -484,221 +484,24 @@ BlockPool::~BlockPool() {
 PinnedByteBlockPtr
 BlockPool::AllocateByteBlock(size_t size, size_t local_worker_id) {
     assert(local_worker_id < workers_per_host_);
-    std::unique_lock<std::mutex> lock(mutex_);
-
-    if (!(size % THRILL_DEFAULT_ALIGN == 0 && tlx::is_power_of_two(size))
-        // make exception to block_size constraint for test programs, which use
-        // irregular block sizes to check all corner cases
-        && d_->hard_ram_limit_ != 0) {
-        die("BlockPool: requested unaligned block_size=" << size << "." <<
-            "ByteBlocks must be >= " << THRILL_DEFAULT_ALIGN << " and a power of two.");
-    }
-
-    d_->IntRequestInternalMemory(lock, size);
-
-    // allocate block memory. -- unlock mutex for that time, since it may
-    // require block eviction.
-    lock.unlock();
-    Byte* data = d_->aligned_alloc_.allocate(size);
-    LOGC(debug_alloc)
-        << "ByteBlock aligned_alloc: " << (void*)data << " size " << size;
-    lock.lock();
-
+    auto page_id = cache_alloc_page();
     // create tlx::CountingPtr, no need for special make_shared()-equivalent
     PinnedByteBlockPtr block_ptr(
-        mem::GPool().make<ByteBlock>(this, data, size), local_worker_id);
-    ++d_->total_byte_blocks_;
-    d_->total_bytes_ += size;
-    d_->max_total_bytes_ = std::max(d_->max_total_bytes_, d_->total_bytes_.value);
-    IntIncBlockPinCount(block_ptr.get(), local_worker_id);
-
-    d_->pin_count_.Increment(local_worker_id, size);
-
-    LOGC(debug_blc)
-        << "BlockPool::AllocateBlock()"
-        << " ptr=" << block_ptr.get()
-        << " size=" << size
-        << " local_worker_id=" << local_worker_id
-        << " total_blocks()=" << d_->int_total_blocks()
-        << " total_bytes()=" << d_->int_total_bytes()
-        << d_->pin_count_;
-
+        mem::GPool().make<ByteBlock>(this, page_id, size), local_worker_id);
     return block_ptr;
 }
 
 ByteBlockPtr BlockPool::MapExternalBlock(
     const foxxll::file_ptr& file, uint64_t offset, size_t size) {
-    std::unique_lock<std::mutex> lock(mutex_);
-    // create tlx::CountingPtr, no need for special make_shared()-equivalent
-    ByteBlockPtr block_ptr(
-        mem::GPool().make<ByteBlock>(this, file, offset, size));
-    ++d_->total_byte_blocks_;
-    d_->max_total_bytes_ = std::max(d_->max_total_bytes_, d_->total_bytes_.value);
-    d_->total_bytes_ += size;
-
-    LOGC(debug_blc)
-        << "BlockPool::MapExternalBlock()"
-        << " ptr=" << block_ptr.get()
-        << " offset=" << offset
-        << " size=" << size;
-
-    return block_ptr;
+  PANIC_NOT_IMPLEMENTED;
 }
 
 //! Pins a block by swapping it in if required.
 PinRequestPtr BlockPool::PinBlock(const Block& block, size_t local_worker_id) {
     assert(local_worker_id < workers_per_host_);
-    std::unique_lock<std::mutex> lock(mutex_);
-
     ByteBlock* block_ptr = block.byte_block().get();
-
-    if (block_ptr->pin_count_[local_worker_id] > 0) {
-        // We may get a Block who's underlying is already pinned, since
-        // PinnedBlock become Blocks when transfered between Files or delivered
-        // via GetItemRange() or Scatter().
-
-        die_unless(!d_->unpinned_blocks_.exists(block_ptr));
-        die_unless(d_->reading_.find(block_ptr) == d_->reading_.end());
-
-        LOGC(debug_pin)
-            << "BlockPool::PinBlock block=" << &block
-            << " already pinned by thread";
-
-        IntIncBlockPinCount(block_ptr, local_worker_id);
-
-        return PinRequestPtr(mem::GPool().make<PinRequest>(
-                                 this, PinnedBlock(block, local_worker_id)));
-    }
-
-    if (block_ptr->total_pins_ > 0) {
-        // This block was already pinned by another thread, hence we only need
-        // to get a pin for the new thread.
-
-        die_unless(!d_->unpinned_blocks_.exists(block_ptr));
-        die_unless(d_->reading_.find(block_ptr) == d_->reading_.end());
-
-        LOGC(debug_pin)
-            << "BlockPool::PinBlock block=" << block
-            << " already pinned by another thread"
-            << d_->pin_count_;
-
-        IntIncBlockPinCount(block_ptr, local_worker_id);
-        d_->pin_count_.Increment(local_worker_id, block_ptr->size());
-
-        return PinRequestPtr(mem::GPool().make<PinRequest>(
-                                 this, PinnedBlock(block, local_worker_id)));
-    }
-
-    // check that not writing the block.
-    WritingMap::iterator write_it;
-    while ((write_it = d_->writing_.find(block_ptr)) != d_->writing_.end()) {
-
-        LOGC(debug_em)
-            << "BlockPool::PinBlock() block=" << block_ptr
-            << " is currently begin written to external memory, canceling.";
-
-        die_unless(!block_ptr->ext_file_);
-
-        // get reference count to request, since complete handler removes it
-        // from the map.
-        foxxll::request_ptr req = write_it->second;
-        lock.unlock();
-        // cancel I/O request
-        if (!req->cancel()) {
-
-            LOGC(debug_em)
-                << "BlockPool::PinBlock() block=" << block_ptr
-                << " is currently begin written to external memory, "
-                << "cancel failed, waiting.";
-
-            // must still wait for cancellation to complete and the I/O
-            // handler.
-            req->wait();
-        }
-        lock.lock();
-
-        LOGC(debug_em)
-            << "BlockPool::PinBlock() block=" << block_ptr
-            << " is currently begin written to external memory, "
-            << "cancel/wait done.";
-
-        // recheck whether block is being written, it may have been evicting
-        // the unlocked time.
-    }
-
-    // check if block is being loaded. in this case, just deliver the
-    // shared_future.
-    ReadingMap::iterator read_it = d_->reading_.find(block_ptr);
-    if (read_it != d_->reading_.end())
-        return read_it->second;
-
-    if (block_ptr->in_memory())
-    {
-        // unpinned block in memory, no need to load from EM.
-
-        // remove from unpinned list
-        die_unless(d_->unpinned_blocks_.exists(block_ptr));
-        d_->unpinned_blocks_.erase(block_ptr);
-        d_->unpinned_bytes_ -= block_ptr->size();
-
-        IntIncBlockPinCount(block_ptr, local_worker_id);
-        d_->pin_count_.Increment(local_worker_id, block_ptr->size());
-
-        LOGC(debug_pin)
-            << "BlockPool::PinBlock block=" << &block
-            << " pinned from internal memory"
-            << d_->pin_count_;
-
-        return PinRequestPtr(mem::GPool().make<PinRequest>(
-                                 this, PinnedBlock(block, local_worker_id)));
-    }
-
-    // else need to initiate an async read to get the data.
-
-    die_unless(block_ptr->em_bid_.storage);
-
-    // maybe blocking call until memory is available, this also swaps out other
-    // blocks.
-    d_->IntRequestInternalMemory(lock, block_ptr->size());
-
-    // the requested memory is already counted as a pin.
-    d_->pin_count_.Increment(local_worker_id, block_ptr->size());
-
-    // initiate reading from EM -- already create PinnedBlock, which will hold
-    // the read data
-    PinRequestPtr read(
-        mem::GPool().make<PinRequest>(
-            this, PinnedBlock(block, local_worker_id), /* ready */ false));
-    d_->reading_[block_ptr] = read;
-
-    // allocate block memory.
-    lock.unlock();
-    Byte* data = read->byte_block()->data_ =
-        d_->aligned_alloc_.allocate(block_ptr->size());
-    lock.lock();
-
-    if (!block_ptr->ext_file_) {
-        d_->swapped_.erase(block_ptr);
-        d_->swapped_bytes_ -= block_ptr->size();
-    }
-
-    LOGC(debug_em)
-        << "BlockPool::PinBlock block=" << block
-        << " requested from external memory"
-        << d_->pin_count_;
-
-    // issue I/O request, hold the reference to the request in the hashmap
-    read->req_ =
-        block_ptr->em_bid_.storage->aread(
-            // parameters for the read
-            data, block_ptr->em_bid_.offset, block_ptr->size(),
-            // construct an immediate CompletionHandler callback
-            foxxll::completion_handler::make<
-                PinRequest, &PinRequest::OnComplete>(*read));
-
-    d_->reading_bytes_ += block_ptr->size();
-
-    return read;
+    return PinRequestPtr(mem::GPool().make<PinRequest>(
+        this, PinnedBlock(block, local_worker_id)));
 }
 
 std::pair<size_t, size_t> BlockPool::MaxMergeDegreePrefetch(size_t num_files) {
@@ -723,146 +526,22 @@ void PinRequest::OnComplete(foxxll::request* req, bool success) {
 
 void BlockPool::OnReadComplete(
     PinRequest* read, foxxll::request* req, bool success) {
-    std::unique_lock<std::mutex> lock(mutex_);
-
-    ByteBlock* block_ptr = read->block_.byte_block().get();
-    size_t block_size = block_ptr->size();
-
-    LOGC(debug_em)
-        << "OnReadComplete():"
-        << " req " << req << " block " << *block_ptr
-        << " size " << block_size << " done,"
-        << " from " << block_ptr->em_bid_ << " success = " << success;
-    req->check_errors();
-
-    if (!success)
-    {
-        // request was canceled. this is not an I/O error, but intentional,
-        // e.g. because the Block was deleted.
-
-        if (!block_ptr->ext_file_) {
-            d_->swapped_.insert(block_ptr);
-            d_->swapped_bytes_ += block_size;
-        }
-
-        // release memory
-        sLOGC(debug_alloc)
-            << "ByteBlock  deallocate"
-            << (void*)read->byte_block()->data_ << "size" << block_size;
-        d_->aligned_alloc_.deallocate(read->byte_block()->data_, block_size);
-
-        d_->IntReleaseInternalMemory(block_size);
-
-        // the requested memory was already counted as a pin.
-        d_->pin_count_.Decrement(read->block_.local_worker_id_, block_size);
-
-        // set delivered PinnedBlock as invalid.
-        read->byte_block().reset();
-    }
-    else    // success
-    {
-        // set pin on ByteBlock
-        IntIncBlockPinCount(block_ptr, read->block_.local_worker_id_);
-
-        if (!block_ptr->ext_file_) {
-            d_->bm_->delete_block(block_ptr->em_bid_);
-            block_ptr->em_bid_ = foxxll::BID<0>();
-        }
-    }
-
-    read->ready_ = true;
-    d_->reading_bytes_ -= block_size;
-    cv_read_complete_.notify_all();
-
-    // first released the foxxll::request's file reference because it is
-    // possible that the PinRequest contains the last reference to this
-    // ByteBlock. In that case the ByteBlock's foxxll::file_ptr is released in
-    // the step below, when the PinRequestPtr is deleted. This triggers an
-    // error, because the current foxxll::request is still active on the
-    // foxxll::file_ptr.
-    req->release_file_reference();
-
-    // remove the PinRequest from the hash map. The problem here is that the
-    // PinRequestPtr may have been discarded (the Pin wasn't needed after
-    // all). In that case, deletion of PinRequest will call Unpin, which creates
-    // a deadlock on the mutex_. Hence, we first move the PinRequest out of the
-    // map, then unlock, and delete it. -tb
-    auto it = d_->reading_.find(block_ptr);
-    die_unless(it != d_->reading_.end());
-    PinRequestPtr holder = std::move(it->second);
-    d_->reading_.erase(it);
-    lock.unlock();
 }
 
 void BlockPool::IncBlockPinCount(ByteBlock* block_ptr, size_t local_worker_id) {
-    std::unique_lock<std::mutex> lock(mutex_);
-    assert(local_worker_id < workers_per_host_);
-    die_unless(block_ptr->pin_count_[local_worker_id] > 0);
-    return IntIncBlockPinCount(block_ptr, local_worker_id);
+    block_ptr->SetData((Byte*) cache_pin(block_ptr->page_id_));
 }
 
 void BlockPool::IntIncBlockPinCount(ByteBlock* block_ptr, size_t local_worker_id) {
-    assert(local_worker_id < workers_per_host_);
-
-    ++block_ptr->pin_count_[local_worker_id];
-    ++block_ptr->total_pins_;
-
-    LOGC(debug_pin)
-        << "BlockPool::IncBlockPinCount()"
-        << " byte_block=" << block_ptr
-        << " ++block.pin_count[" << local_worker_id << "]="
-        << block_ptr->pin_count_[local_worker_id]
-        << " ++block.total_pins_=" << block_ptr->total_pins_
-        << d_->pin_count_;
+    block_ptr->SetData((Byte*) cache_pin(block_ptr->page_id_));
 }
 
 void BlockPool::DecBlockPinCount(ByteBlock* block_ptr, size_t local_worker_id) {
-    std::unique_lock<std::mutex> lock(mutex_);
-
-    assert(local_worker_id < workers_per_host_);
-    die_unless(block_ptr->pin_count_[local_worker_id] > 0);
-    die_unless(block_ptr->total_pins_ > 0);
-
-    size_t p = --block_ptr->pin_count_[local_worker_id];
-    size_t tp = --block_ptr->total_pins_;
-
-    LOGC(debug_pin)
-        << "BlockPool::DecBlockPinCount()"
-        << " byte_block=" << block_ptr
-        << " --block.pin_count[" << local_worker_id << "]=" << p
-        << " --block.total_pins_=" << tp
-        << " local_worker_id=" << local_worker_id;
-
-    if (p == 0)
-        d_->IntUnpinBlock(*this, block_ptr, local_worker_id);
+    cache_unpin(block_ptr->page_id_, true);
 }
 
 void BlockPool::Data::IntUnpinBlock(
     BlockPool& bp, ByteBlock* block_ptr, size_t local_worker_id) {
-    die_unless(local_worker_id < bp.workers_per_host_);
-
-    // decrease per-thread total pin count (memory locked by thread)
-    die_unless(block_ptr->pin_count(local_worker_id) == 0);
-
-    pin_count_.Decrement(local_worker_id, block_ptr->size());
-
-    if (block_ptr->total_pins_ != 0) {
-        LOGC(debug_pin)
-            << "BlockPool::IntUnpinBlock()"
-            << " --block.total_pins_=" << block_ptr->total_pins_;
-        return;
-    }
-
-    // if all per-thread pins are zero, allow this Block to be swapped out.
-    die_unless(!unpinned_blocks_.exists(block_ptr));
-    unpinned_blocks_.put(block_ptr);
-    unpinned_bytes_ += block_ptr->size();
-
-    LOGC(debug_pin)
-        << "BlockPool::IntUnpinBlock()"
-        << " byte_block=" << block_ptr
-        << " --total_pins_=" << block_ptr->total_pins_
-        << " allow swap out.";
 }
 
 size_t BlockPool::total_blocks() noexcept {
@@ -938,147 +617,6 @@ size_t BlockPool::reading_blocks() noexcept {
 }
 
 void BlockPool::DestroyBlock(ByteBlock* block_ptr) {
-    // this method is called by ByteBlockPtr's deleter when the reference
-    // counter reaches zero to deallocate the block.
-    std::unique_lock<std::mutex> lock(mutex_);
-
-    LOGC(debug_blc)
-        << "BlockPool::DestroyBlock() block_ptr=" << block_ptr
-        << " byte_block=" << *block_ptr;
-
-    // pinned blocks cannot be destroyed since they are always unpinned first
-    die_unless(block_ptr->total_pins_ == 0);
-
-    // delete pin_count_ -> mark block as being deleted
-    block_ptr->pin_count_.clear();
-
-    do {
-        if (block_ptr->in_memory())
-        {
-            // block was evicted, may still be writing to EM.
-            WritingMap::iterator it = d_->writing_.find(block_ptr);
-            if (it != d_->writing_.end()) {
-                // get reference count to request, since complete handler
-                // removes it from the map.
-                foxxll::request_ptr req = it->second;
-
-                LOGC(debug_em)
-                    << "DestroyBlock()"
-                    << " canceling write I/O request " << req
-                    << " for block " << *block_ptr;
-
-                lock.unlock();
-                // cancel I/O request
-                if (!req->cancel()) {
-                    // must still wait for cancellation to complete and the I/O
-                    // handler.
-                    req->wait();
-                }
-                lock.lock();
-
-                // recheck whether block is being written, it may have been
-                // evicting the unlocked time.
-                continue;
-            }
-        }
-        else
-        {
-            // block was being pinned. cancel read operation
-            ReadingMap::iterator it = d_->reading_.find(block_ptr);
-            if (it != d_->reading_.end()) {
-                // get reference count to request, since complete handler
-                // removes it from the map.
-                foxxll::request_ptr req = it->second->req_;
-
-                LOGC(debug_em)
-                    << "DestroyBlock()"
-                    << " canceling read I/O request " << req
-                    << " for block " << *block_ptr;
-
-                lock.unlock();
-                // cancel I/O request
-                if (!req->cancel()) {
-                    // must still wait for cancellation to complete and the I/O
-                    // handler.
-                    req->wait();
-                }
-                lock.lock();
-
-                // recheck whether block is being read, it may have been
-                // evicting again in the unlocked time.
-                continue;
-            }
-        }
-    }
-    while (0); // NOLINT
-
-    if (block_ptr->ext_file_ && block_ptr->in_memory())
-    {
-        LOGC(debug_blc)
-            << "BlockPool::DestroyBlock() block_ptr=" << block_ptr
-            << " external block, in memory: release memory.";
-
-        die_unless(d_->unpinned_blocks_.exists(block_ptr));
-        d_->unpinned_blocks_.erase(block_ptr);
-        d_->unpinned_bytes_ -= block_ptr->size();
-
-        // release memory
-        sLOGC(debug_alloc)
-            << "ByteBlock deallocate"
-            << (void*)block_ptr->data_ << "size" << block_ptr->size();
-        d_->aligned_alloc_.deallocate(block_ptr->data_, block_ptr->size());
-        block_ptr->data_ = nullptr;
-
-        d_->IntReleaseInternalMemory(block_ptr->size());
-    }
-    else if (block_ptr->ext_file_)
-    {
-        LOGC(debug_blc)
-            << "BlockPool::DestroyBlock() block_ptr=" << block_ptr
-            << " external block, but not in memory: nothing to do, thus just"
-            << " delete the reference";
-    }
-    else if (block_ptr->in_memory())
-    {
-        LOGC(debug_blc)
-            << "BlockPool::DestroyBlock() block_ptr=" << block_ptr
-            << " unpinned block in memory, remove from list";
-
-        if (d_->unpinned_blocks_.exists(block_ptr)) {
-            d_->unpinned_blocks_.erase(block_ptr);
-            d_->unpinned_bytes_ -= block_ptr->size();
-        }
-
-        // release memory
-        sLOGC(debug_alloc)
-            << "ByteBlock deallocate"
-            << (void*)block_ptr->data_ << "size" << block_ptr->size();
-        d_->aligned_alloc_.deallocate(block_ptr->data_, block_ptr->size());
-        block_ptr->data_ = nullptr;
-
-        d_->IntReleaseInternalMemory(block_ptr->size());
-    }
-    else
-    {
-        LOGC(debug_blc)
-            << "BlockPool::DestroyBlock() block_ptr=" << block_ptr
-            << " block in external memory, delete block";
-
-        auto it = d_->swapped_.find(block_ptr);
-        die_unless(it != d_->swapped_.end());
-
-        d_->swapped_.erase(it);
-        d_->swapped_bytes_ -= block_ptr->size();
-
-        d_->bm_->delete_block(block_ptr->em_bid_);
-        block_ptr->em_bid_ = foxxll::BID<0>();
-    }
-
-    assert(d_->total_byte_blocks_ > 0);
-    assert(d_->total_bytes_ >= block_ptr->size());
-    --d_->total_byte_blocks_;
-    d_->total_bytes_ -= block_ptr->size();
-    d_->cv_total_byte_blocks_.notify_all();
 }
 
 void BlockPool::RequestInternalMemory(size_t size) {
@@ -1243,103 +781,11 @@ foxxll::request_ptr BlockPool::Data::IntEvictBlockLRU() {
 }
 
 foxxll::request_ptr BlockPool::Data::IntEvictBlock(ByteBlock* block_ptr) {
-
-    // die_unless(block_ptr->block_pool_ == this);
-
-    if (block_ptr->ext_file_) {
-        // if in external file -> free memory without writing
-
-        LOGC(debug_em)
-            << "EvictBlock(): " << block_ptr << " - " << *block_ptr
-            << " from ext_file " << block_ptr->ext_file_;
-
-        // release memory
-        sLOGC(debug_alloc)
-            << "ByteBlock deallocate"
-            << (void*)block_ptr->data_ << "size" << block_ptr->size();
-        aligned_alloc_.deallocate(block_ptr->data_, block_ptr->size());
-        block_ptr->data_ = nullptr;
-
-        IntReleaseInternalMemory(block_ptr->size());
-        return foxxll::request_ptr();
-    }
-
-    if (!notify_em_used_) {
-        std::cerr << "Thrill: evicting first Block to external memory. "
-            "Be aware, that unexpected" << std::endl;
-        std::cerr << "Thrill: use of external memory may lead to "
-            "disappointingly slow performance." << std::endl;
-        notify_em_used_ = true;
-    }
-
-    die_unless(block_ptr->em_bid_.storage == nullptr);
-
-    // allocate EM block
-    block_ptr->em_bid_.size = block_ptr->size();
-    bm_->new_block(foxxll::fully_random(), block_ptr->em_bid_);
-
-    LOGC(debug_em)
-        << "EvictBlock(): " << block_ptr << " - " << *block_ptr
-        << " to em_bid " << block_ptr->em_bid_;
-
-    writing_bytes_ += block_ptr->size();
-
-    // initiate writing to EM.
-    foxxll::request_ptr req =
-        block_ptr->em_bid_.storage->awrite(
-            block_ptr->data_, block_ptr->em_bid_.offset, block_ptr->size(),
-            // construct an immediate CompletionHandler callback
-            foxxll::completion_handler::make<
-                ByteBlock, &ByteBlock::OnWriteComplete>(block_ptr));
-
-    return (writing_[block_ptr] = std::move(req));
+  return foxxll::request_ptr();
 }
 
 void BlockPool::OnWriteComplete(
     ByteBlock* block_ptr, foxxll::request* req, bool success) {
-    std::unique_lock<std::mutex> lock(mutex_);
-
-    LOGC(debug_em)
-        << "OnWriteComplete(): request " << req << " done,"
-        << " block " << *block_ptr << " to " << block_ptr->em_bid_
-        << " success = " << success;
-    req->check_errors();
-
-    die_unless(!block_ptr->ext_file_);
-    die_unequal(d_->writing_.erase(block_ptr), 1u);
-    d_->writing_bytes_ -= block_ptr->size();
-
-    if (!success)
-    {
-        // request was canceled. this is not an I/O error, but intentional,
-        // e.g. because the block was deleted or if it was re-pinned while being
-        // written to disk.
-
-        if (!block_ptr->is_deleted()) {
-            die_unless(!d_->unpinned_blocks_.exists(block_ptr));
-            d_->unpinned_blocks_.put(block_ptr);
-            d_->unpinned_bytes_ += block_ptr->size();
-        }
-
-        d_->bm_->delete_block(block_ptr->em_bid_);
-        block_ptr->em_bid_ = foxxll::BID<0>();
-    }
-    else
-    {
-        // success
-
-        d_->swapped_.insert(block_ptr);
-        d_->swapped_bytes_ += block_ptr->size();
-
-        // release memory
-        sLOGC(debug_alloc)
-            << "ByteBlock deallocate"
-            << (void*)block_ptr->data_ << "size" << block_ptr->size();
-        d_->aligned_alloc_.deallocate(block_ptr->data_, block_ptr->size());
-        block_ptr->data_ = nullptr;
-
-        d_->IntReleaseInternalMemory(block_ptr->size());
-    }
 }
 
 void BlockPool::RunTask(const std::chrono::steady_clock::time_point& tp) {

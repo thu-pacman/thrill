@@ -25,9 +25,37 @@ extern void *cache_pin(size_t page_id);
 extern void cache_unpin(size_t page_id, bool is_write);
 extern size_t cache_alloc_page();
 extern void cache_free_page(size_t page_id);
+extern size_t cache_pin_count(size_t page_id);
 
 #ifdef __cplusplus
 }
 #endif
+
+#define PANIC_NOT_IMPLEMENTED doPanic(__FILE__, __LINE__, "Not implemented")
+
+#include <iostream>
+#include <memory>
+
+static void doPanic(std::string file, int line, std::string givenMsg) {
+  std::cout << "Panic: " << file << ":" << line << " " << givenMsg;
+  exit(-1);
+}
+
+class MyBlock {
+  size_t pageId_;
+public:
+  MyBlock() : pageId_(cache_alloc_page()) {}
+  virtual ~MyBlock() { cache_free_page(pageId_); }
+};
+
+class MyPinnedBlock {
+  size_t pageId_;
+  void* ptr_;
+  bool dirty_ = false;
+
+public:
+  MyPinnedBlock(size_t pageId) : pageId_(pageId), ptr_(cache_pin(pageId)) {}
+  virtual ~MyPinnedBlock() { cache_unpin(pageId_, dirty_); }
+};
 
 #endif // THRILL_LOWLEVEL_CACHE_H
