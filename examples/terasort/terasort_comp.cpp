@@ -183,7 +183,7 @@ int main(int argc, char* argv[]) {
             }
             else {
                 if (use_signed_char) {
-                    auto rr = ReadBinary<RecordSigned>(ctx, input).Keep();
+                    auto rr = ReadBinary<RecordSigned>(ctx, input).Cache().KeepForever();
                     size_t count = rr.Size();
                     if (ctx.my_rank() == 0) {
                         std::cout << "whole count is " << count << std::endl;
